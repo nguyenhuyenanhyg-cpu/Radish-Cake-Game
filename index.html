@@ -13,11 +13,12 @@
             --background: #F4F7F6;
             --card-bg: #FFFFFF;
             --text-main: #333333;
-            --text-muted: #777777;
+            --text-muted: #666666;
+            --border: #E0E0E0;
         }
 
         body {
-            font-family: 'Helvetica Neue', Arial, 'LiHei Pro', 'Microsoft JhengHei', sans-serif;
+            font-family: 'Helvetica Neue', Arial, 'Microsoft JhengHei', sans-serif;
             background-color: var(--background);
             color: var(--text-main);
             margin: 0;
@@ -30,200 +31,200 @@
 
         .container {
             background-color: var(--card-bg);
-            max-width: 600px;
+            max-width: 900px;
             width: 100%;
             border-radius: 12px;
             box-shadow: 0 8px 24px rgba(0,0,0,0.08);
             overflow: hidden;
             position: relative;
+            display: flex;
+            flex-direction: column;
+            min-height: 500px;
         }
+
+        /* Navigation Bar */
+        .nav-bar {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 20px;
+            background-color: #f8f9fa;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .nav-btn:hover { color: var(--primary); }
 
         .stage {
             display: none;
-            padding: 40px 30px;
-            opacity: 0;
-            transition: opacity 0.4s ease-in-out;
+            padding: 30px 40px;
+            flex-grow: 1;
+            animation: fadeIn 0.4s ease-in-out;
         }
 
-        .stage.active {
-            display: block;
-            opacity: 1;
+        .stage.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        h2 {
-            margin-top: 0;
-            color: var(--primary);
-            border-bottom: 2px solid #EEE;
-            padding-bottom: 10px;
-        }
+        h2 { margin-top: 0; color: var(--primary); border-bottom: 2px solid #EEE; padding-bottom: 10px; }
+        .en-sub { color: var(--text-muted); font-size: 0.9em; display: block; margin-top: 4px; font-weight: normal; }
 
         .btn {
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            font-size: 16px;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: background-color 0.2s, transform 0.1s;
-            width: 100%;
-            margin-top: 10px;
+            background-color: var(--primary); color: white; border: none; padding: 12px 20px;
+            font-size: 16px; border-radius: 6px; cursor: pointer; transition: 0.2s; width: 100%; margin-top: 15px;
+        }
+        .btn:hover:not(:disabled) { background-color: var(--primary-hover); }
+        .btn:disabled { background-color: #BDC3C7; cursor: not-allowed; }
+
+        .option-btn { background-color: white; color: var(--text-main); border: 2px solid var(--border); text-align: left; margin-bottom: 10px; }
+        .option-btn:hover:not(:disabled) { border-color: var(--primary); background-color: #F8FBFF; }
+        .option-btn.selected { border-color: var(--primary); background-color: #F8FBFF; font-weight: bold; }
+        .option-btn.correct { border-color: var(--success); background-color: #EAFBF1; }
+        .option-btn.wrong { border-color: var(--error); background-color: #FDEDED; }
+
+        /* Reading Layout */
+        .reading-layout {
+            display: flex; gap: 30px; align-items: flex-start;
+        }
+        .text-panel { flex: 1.5; font-size: 1.1em; line-height: 2; max-height: 60vh; overflow-y: auto; padding-right: 15px;}
+        .image-panel { flex: 1; position: sticky; top: 0; }
+        .image-panel img { width: 100%; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); object-fit: cover; }
+
+        @media (max-width: 768px) {
+            .reading-layout { flex-direction: column-reverse; }
+            .image-panel { position: static; }
         }
 
-        .btn:hover:not(:disabled) {
-            background-color: var(--primary-hover);
-        }
+        /* Ruby (Pinyin) Styles */
+        ruby { ruby-align: center; margin-right: 2px; }
+        rt { font-size: 0.6em; color: #888; font-family: Arial, sans-serif; transition: opacity 0.3s; }
+        .hide-pinyin rt { opacity: 0; user-select: none; }
+        .speaker { font-weight: bold; color: var(--primary); }
 
-        .btn:active:not(:disabled) {
-            transform: scale(0.98);
-        }
+        .toolbar { display: flex; justify-content: flex-end; margin-bottom: 15px; }
+        .toggle-btn { background: #eee; border: 1px solid #ccc; padding: 6px 12px; border-radius: 20px; cursor: pointer; font-size: 14px; }
+        .toggle-btn:hover { background: #e0e0e0; }
 
-        .btn:disabled {
-            background-color: #BDC3C7;
-            cursor: not-allowed;
-            opacity: 0.7;
-        }
-
-        .option-btn {
-            background-color: white;
-            color: var(--text-main);
-            border: 2px solid #E0E0E0;
-            text-align: left;
-            margin-bottom: 10px;
-        }
-
-        .option-btn:hover:not(:disabled) {
-            border-color: var(--primary);
-            background-color: #F8FBFF;
-        }
-
-        .option-btn.correct {
-            border-color: var(--success);
-            background-color: #EAFBF1;
-        }
-
-        .option-btn.wrong {
-            border-color: var(--error);
-            background-color: #FDEDED;
-        }
-
-        .feedback-box {
-            margin-top: 20px;
-            padding: 15px;
-            border-radius: 6px;
-            display: none;
-            font-weight: bold;
-        }
-
-        /* Stage 2 Reading specific styles */
-        .dialogue-container {
-            max-height: 400px;
-            overflow-y: auto;
-            padding-right: 10px;
-            line-height: 1.6;
-        }
-        
-        .dialogue-line {
-            margin-bottom: 15px;
-        }
-
-        .speaker {
-            font-weight: bold;
-            color: var(--primary);
-            margin-right: 8px;
-        }
-
-        .action-text {
-            color: var(--text-muted);
-            font-style: italic;
-            text-align: center;
-            margin: 20px 0;
-        }
-
-        /* Progress indicator */
-        .progress-text {
-            font-size: 14px;
-            color: var(--text-muted);
-            margin-bottom: 15px;
-        }
-        
-        .hint-text {
-            color: var(--error);
-            font-size: 14px;
-            margin-top: 10px;
-            display: none;
-        }
-
-        .center-text {
-            text-align: center;
-        }
-
-        .score-display {
-            font-size: 48px;
-            font-weight: bold;
-            color: var(--primary);
-            margin: 20px 0;
-        }
+        .hint-text { color: var(--error); font-size: 14px; margin-top: 10px; font-weight: bold; display: none; }
+        .review-box { background: #f9f9f9; padding: 15px; border-radius: 8px; margin-top: 20px; border-left: 4px solid var(--primary); text-align: left;}
+        .center-text { text-align: center; }
+        .score-display { font-size: 48px; font-weight: bold; color: var(--primary); margin: 20px 0; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    
+    <div class="nav-bar">
+        <button class="nav-btn" onclick="goBack()" id="btn-back">⬅️ 返回 Back</button>
+        <button class="nav-btn" onclick="goHome()">🏠 首頁 Home</button>
+    </div>
+
     <div id="stage1" class="stage active">
-        <h2>課前動動腦</h2>
-        <p>在開始閱讀之前，我們先來猜一個小問題：</p>
-        <p><strong>台灣哪一種傳統食物除了過年，平常早餐也常看到？</strong></p>
+        <h2>課前動動腦 <span class="en-sub">Warm-up Activity</span></h2>
+        <p>在開始閱讀之前，我們先來猜一個小問題：<br><span class="en-sub">Before reading, let's guess:</span></p>
+        <p><strong>台灣哪一種傳統食物除了過年，平常早餐也常看到？</strong><br>
+        <span class="en-sub">Which traditional Taiwanese food is commonly seen for breakfast on normal days, besides during the Lunar New Year?</span></p>
         
         <div id="s1-options">
-            <button class="btn option-btn" onclick="checkStage1('A', this)">A. 臭豆腐</button>
-            <button class="btn option-btn" onclick="checkStage1('B', this)">B. 蘿蔔糕</button>
-            <button class="btn option-btn" onclick="checkStage1('C', this)">C. 佛跳牆</button>
-            <button class="btn option-btn" onclick="checkStage1('D', this)">D. 粽子</button>
+            <button class="btn option-btn" onclick="selectStage1('A', this)">A. 臭豆腐 <span class="en-sub">Stinky Tofu</span></button>
+            <button class="btn option-btn" onclick="selectStage1('B', this)">B. 蘿蔔糕 <span class="en-sub">Radish Cake</span></button>
+            <button class="btn option-btn" onclick="selectStage1('C', this)">C. 佛跳牆 <span class="en-sub">Buddha Jumps Over the Wall</span></button>
+            <button class="btn option-btn" onclick="selectStage1('D', this)">D. 粽子 <span class="en-sub">Zongzi</span></button>
         </div>
 
-        <div id="s1-feedback" class="feedback-box"></div>
-        <button id="btn-to-reading" class="btn" style="display:none; margin-top: 20px;" onclick="goToStage(2)">繼續前往閱讀內容 ➔</button>
+        <div id="s1-feedback" class="hint-text" style="color: var(--primary);">
+            很有趣的選擇！我們一起在文章裡找答案吧。<br><span class="en-sub">Interesting choice! Let's find the answer in the reading.</span>
+        </div>
+        <button id="btn-to-reading" class="btn" style="display:none;" onclick="goToStage(2)">去閱讀文本 Read the Text ➔</button>
     </div>
 
     <div id="stage2" class="stage">
-        <h2>閱讀對話</h2>
-        <div class="dialogue-container">
-            <div class="dialogue-line"><span class="speaker">惠玲：</span>馬丁，你看，好多人在這家店排隊買蘿蔔糕！</div>
-            <div class="dialogue-line"><span class="speaker">馬丁：</span>哇，他們的蘿蔔糕可能很好吃吧！我們要不要買幾塊試試？</div>
-            <div class="dialogue-line"><span class="speaker">惠玲：</span>好啊！你知道嗎？蘿蔔糕是台灣人過年常吃的傳統食物。</div>
-            <div class="dialogue-line"><span class="speaker">馬丁：</span>為什麼台灣人過年會吃蘿蔔糕？</div>
-            <div class="dialogue-line"><span class="speaker">惠玲：</span>「蘿蔔」的臺語叫「菜頭」，聽起來像「好彩頭」，意思是新的一年有好運氣、順利。</div>
-            <div class="dialogue-line"><span class="speaker">馬丁：</span>原來蘿蔔糕是吉祥的食物啊！那它是用什麼做的？</div>
-            <div class="dialogue-line"><span class="speaker">惠玲：</span>用在來米粉、白蘿蔔、蝦米和乾香菇做的，吃起來很香。</div>
-            <div class="action-text">（買好後邊走邊吃）</div>
-            <div class="dialogue-line"><span class="speaker">馬丁：</span>表皮有點脆，裡面很軟，味道剛好，真的很好吃！我第一次吃到這種特別的食物。</div>
-            <div class="dialogue-line"><span class="speaker">惠玲：</span>蘿蔔糕我們過年吃，平常也會吃。</div>
-            <div class="dialogue-line"><span class="speaker">馬丁：</span>那我以後的早餐就多一個選擇了！</div>
+        <h2>閱讀對話 <span class="en-sub">Reading Dialogue</span></h2>
+        <div class="toolbar">
+            <button class="toggle-btn" onclick="togglePinyin()">Aa 顯示/隱藏拼音 Toggle Pinyin</button>
         </div>
-        <button class="btn" style="margin-top: 30px;" onclick="startQuiz()">我讀完了，開始測驗 ➔</button>
+        
+        <div class="reading-layout">
+            <div class="text-panel hide-pinyin" id="reading-content">
+                <div><span class="speaker">惠玲：</span><ruby>馬<rt>mǎ</rt></ruby><ruby>丁<rt>dīng</rt></ruby>，<ruby>你<rt>nǐ</rt></ruby><ruby>看<rt>kàn</rt></ruby>，<ruby>好<rt>hǎo</rt></ruby><ruby>多<rt>duō</rt></ruby><ruby>人<rt>rén</rt></ruby><ruby>在<rt>zài</rt></ruby><ruby>這<rt>zhè</rt></ruby><ruby>家<rt>jiā</rt></ruby><ruby>店<rt>diàn</rt></ruby><ruby>排<rt>pái</rt></ruby><ruby>隊<rt>duì</rt></ruby><ruby>買<rt>mǎi</rt></ruby><strong><ruby>蘿<rt>luó</rt></ruby><ruby>蔔<rt>bo</rt></ruby><ruby>糕<rt>gāo</rt></ruby></strong>！</div><br>
+                <div><span class="speaker">馬丁：</span><ruby>哇<rt>wa</rt></ruby>，<ruby>他<rt>tā</rt></ruby><ruby>們<rt>men</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>蘿<rt>luó</rt></ruby><ruby>蔔<rt>bo</rt></ruby><ruby>糕<rt>gāo</rt></ruby><ruby>可<rt>kě</rt></ruby><ruby>能<rt>néng</rt></ruby><ruby>很<rt>hěn</rt></ruby><ruby>好<rt>hǎo</rt></ruby><ruby>吃<rt>chī</rt></ruby><ruby>吧<rt>ba</rt></ruby>！<ruby>我<rt>wǒ</rt></ruby><ruby>們<rt>men</rt></ruby><ruby>要<rt>yào</rt></ruby><ruby>不<rt>bù</rt></ruby><ruby>要<rt>yào</rt></ruby><ruby>買<rt>mǎi</rt></ruby><ruby>幾<rt>jǐ</rt></ruby><ruby>塊<rt>kuài</rt></ruby><ruby>試<rt>shì</rt></ruby><ruby>試<rt>shì</rt></ruby>？</div><br>
+                <div><span class="speaker">惠玲：</span><ruby>好<rt>hǎo</rt></ruby><ruby>啊<rt>a</rt></ruby>！<ruby>你<rt>nǐ</rt></ruby><ruby>知<rt>zhī</rt></ruby><ruby>道<rt>dào</rt></ruby><ruby>嗎<rt>ma</rt></ruby>？<ruby>蘿<rt>luó</rt></ruby><ruby>蔔<rt>bo</rt></ruby><ruby>糕<rt>gāo</rt></ruby><ruby>是<rt>shì</rt></ruby><ruby>台<rt>tái</rt></ruby><ruby>灣<rt>wān</rt></ruby><ruby>人<rt>rén</rt></ruby><ruby>過<rt>guò</rt></ruby><ruby>年<rt>nián</rt></ruby><ruby>常<rt>cháng</rt></ruby><ruby>吃<rt>chī</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>傳<rt>chuán</rt></ruby><ruby>統<rt>tǒng</rt></ruby><ruby>食<rt>shí</rt></ruby><ruby>物<rt>wù</rt></ruby>。</div><br>
+                <div><span class="speaker">馬丁：</span><ruby>為<rt>wèi</rt></ruby><ruby>什<rt>shén</rt></ruby><ruby>麼<rt>me</rt></ruby><ruby>台<rt>tái</rt></ruby><ruby>灣<rt>wān</rt></ruby><ruby>人<rt>rén</rt></ruby><ruby>過<rt>guò</rt></ruby><ruby>年<rt>nián</rt></ruby><ruby>會<rt>huì</rt></ruby><ruby>吃<rt>chī</rt></ruby><ruby>蘿<rt>luó</rt></ruby><ruby>蔔<rt>bo</rt></ruby><ruby>糕<rt>gāo</rt></ruby>？</div><br>
+                <div><span class="speaker">惠玲：</span>「<ruby>蘿<rt>luó</rt></ruby><ruby>蔔<rt>bo</rt></ruby>」<ruby>的<rt>de</rt></ruby><ruby>臺<rt>tái</rt></ruby><ruby>語<rt>yǔ</rt></ruby><ruby>叫<rt>jiào</rt></ruby>「<strong><ruby>菜<rt>tshài</rt></ruby><ruby>頭<rt>thâu</rt></ruby></strong>」，<ruby>聽<rt>tīng</rt></ruby><ruby>起<rt>qǐ</rt></ruby><ruby>來<rt>lái</rt></ruby><ruby>像<rt>xiàng</rt></ruby>「<strong><ruby>好<rt>hǎo</rt></ruby><ruby>彩<rt>cǎi</rt></ruby><ruby>頭<rt>tóu</rt></ruby></strong>」，<ruby>意<rt>yì</rt></ruby><ruby>思<rt>si</rt></ruby><ruby>是<rt>shì</rt></ruby><ruby>新<rt>xīn</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>一<rt>yì</rt></ruby><ruby>年<rt>nián</rt></ruby><ruby>有<rt>yǒu</rt></ruby><ruby>好<rt>hǎo</rt></ruby><ruby>運<rt>yùn</rt></ruby><ruby>氣<rt>qì</rt></ruby>、<ruby>順<rt>shùn</rt></ruby><ruby>利<rt>lì</rt></ruby>。</div><br>
+                <div><span class="speaker">馬丁：</span><ruby>原<rt>yuán</rt></ruby><ruby>來<rt>lái</rt></ruby><ruby>蘿<rt>luó</rt></ruby><ruby>蔔<rt>bo</rt></ruby><ruby>糕<rt>gāo</rt></ruby><ruby>是<rt>shì</rt></ruby><ruby>吉<rt>jí</rt></ruby><ruby>祥<rt>xiáng</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>食<rt>shí</rt></ruby><ruby>物<rt>wù</rt></ruby><ruby>啊<rt>a</rt></ruby>！<ruby>那<rt>nà</rt></ruby><ruby>它<rt>tā</rt></ruby><ruby>是<rt>shì</rt></ruby><ruby>用<rt>yòng</rt></ruby><ruby>什<rt>shén</rt></ruby><ruby>麼<rt>me</rt></ruby><ruby>做<rt>zuò</rt></ruby><ruby>的<rt>de</rt></ruby>？</div><br>
+                <div><span class="speaker">惠玲：</span><ruby>用<rt>yòng</rt></ruby><ruby>在<rt>zài</rt></ruby><ruby>來<rt>lái</rt></ruby><ruby>米<rt>mǐ</rt></ruby><ruby>粉<rt>fěn</rt></ruby>、<ruby>白<rt>bái</rt></ruby><ruby>蘿<rt>luó</rt></ruby><ruby>蔔<rt>bo</rt></ruby>、<ruby>蝦<rt>xiā</rt></ruby><ruby>米<rt>mǐ</rt></ruby><ruby>和<rt>hé</rt></ruby><ruby>乾<rt>gān</rt></ruby><ruby>香<rt>xiāng</rt></ruby><ruby>菇<rt>gū</rt></ruby><ruby>做<rt>zuò</rt></ruby><ruby>的<rt>de</rt></ruby>，<ruby>吃<rt>chī</rt></ruby><ruby>起<rt>qǐ</rt></ruby><ruby>來<rt>lái</rt></ruby><ruby>很<rt>hěn</rt></ruby><ruby>香<rt>xiāng</rt></ruby>。</div><br>
+                <div style="color:#888;">（<ruby>買<rt>mǎi</rt></ruby><ruby>好<rt>hǎo</rt></ruby><ruby>後<rt>hòu</rt></ruby><ruby>邊<rt>biān</rt></ruby><ruby>走<rt>zǒu</rt></ruby><ruby>邊<rt>biān</rt></ruby><ruby>吃<rt>chī</rt></ruby>）</div><br>
+                <div><span class="speaker">馬丁：</span><ruby>表<rt>biǎo</rt></ruby><ruby>皮<rt>pí</rt></ruby><ruby>有<rt>yǒu</rt></ruby><ruby>點<rt>diǎn</rt></ruby><ruby>脆<rt>cuì</rt></ruby>，<ruby>裡<rt>lǐ</rt></ruby><ruby>面<rt>miàn</rt></ruby><ruby>很<rt>hěn</rt></ruby><ruby>軟<rt>ruǎn</rt></ruby>，<ruby>味<rt>wèi</rt></ruby><ruby>道<rt>dào</rt></ruby><ruby>剛<rt>gāng</rt></ruby><ruby>好<rt>hǎo</rt></ruby>，<ruby>真<rt>zhēn</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>很<rt>hěn</rt></ruby><ruby>好<rt>hǎo</rt></ruby><ruby>吃<rt>chī</rt></ruby>！<ruby>我<rt>wǒ</rt></ruby><ruby>第<rt>dì</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>次<rt>cì</rt></ruby><ruby>吃<rt>chī</rt></ruby><ruby>到<rt>dào</rt></ruby><ruby>這<rt>zhè</rt></ruby><ruby>種<rt>zhǒng</rt></ruby><ruby>特<rt>tè</rt></ruby><ruby>別<rt>bié</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>食<rt>shí</rt></ruby><ruby>物<rt>wù</rt></ruby>。</div><br>
+                <div><span class="speaker">惠玲：</span><ruby>蘿<rt>luó</rt></ruby><ruby>蔔<rt>bo</rt></ruby><ruby>糕<rt>gāo</rt></ruby><ruby>我<rt>wǒ</rt></ruby><ruby>們<rt>men</rt></ruby><ruby>過<rt>guò</rt></ruby><ruby>年<rt>nián</rt></ruby><ruby>吃<rt>chī</rt></ruby>，<ruby>平<rt>píng</rt></ruby><ruby>常<rt>cháng</rt></ruby><ruby>也<rt>yě</rt></ruby><ruby>會<rt>huì</rt></ruby><ruby>吃<rt>chī</rt></ruby>。</div><br>
+                <div><span class="speaker">馬丁：</span><ruby>那<rt>nà</rt></ruby><ruby>我<rt>wǒ</rt></ruby><ruby>以<rt>yǐ</rt></ruby><ruby>後<rt>hòu</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>早<rt>zǎo</rt></ruby><ruby>餐<rt>cān</rt></ruby><ruby>就<rt>jiù</rt></ruby><ruby>多<rt>duō</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>個<rt>gè</rt></ruby><ruby>選<rt>xuǎn</rt></ruby><ruby>擇<rt>zé</rt></ruby><ruby>了<rt>le</rt></ruby>！</div>
+            </div>
+            <div class="image-panel">
+                <img src="banh-cu-cai.png" alt="台灣蘿蔔糕 Taiwanese Radish Cake" onerror="this.src='https://via.placeholder.com/400x300?text=Image:+banh-cu-cai.png'">
+            </div>
+        </div>
+        <button class="btn" style="margin-top: 20px;" onclick="startQuiz()">讀完了，開始測驗 Ready for Quiz ➔</button>
     </div>
 
     <div id="stage3" class="stage">
-        <h2>閱讀理解測驗</h2>
-        <div class="progress-text" id="quiz-progress">問題 1 / 5</div>
-        <p><strong id="quiz-question-text"></strong></p>
+        <h2>閱讀理解測驗 <span class="en-sub">Comprehension Quiz</span></h2>
+        <div style="color: var(--text-muted); margin-bottom: 15px;" id="quiz-progress">問題 1 / 5</div>
+        <p><strong id="quiz-question-text" style="font-size: 1.1em;"></strong></p>
         
-        <div id="quiz-options">
-            </div>
-
+        <div id="quiz-options"></div>
         <div id="quiz-hint" class="hint-text"></div>
-        <button id="btn-next-question" class="btn" style="display:none; margin-top: 20px;" onclick="nextQuestion()">下一題 ➔</button>
+        <button id="btn-next-question" class="btn" style="display:none;" onclick="nextQuestion()">下一題 Next ➔</button>
     </div>
 
     <div id="stage-result" class="stage center-text">
-        <h2>測驗完成！</h2>
-        <p>太棒了！你完成了今天的學習旅程。</p>
-        <div class="score-display">
-            <span id="final-score">0</span> / 5
+        <h2>學習總結 <span class="en-sub">Learning Summary</span></h2>
+        
+        <div class="review-box" id="warmup-reveal">
+            <strong>課前猜測結果 Warm-up Reveal:</strong><br>
+            你猜的是：<span id="user-guess-display"></span>。<br>
+            正確答案是：<strong>B. 蘿蔔糕</strong>！蘿蔔糕不僅是過年必吃，也是台灣早餐店的常客哦。
         </div>
-        <p id="encouragement-message" style="color: var(--text-muted);"></p>
-        <button class="btn" style="margin-top: 30px;" onclick="location.reload()">再玩一次 ↺</button>
+
+        <div class="score-display">
+            得分 Score: <span id="final-score">0</span> / 5
+        </div>
+
+        <div id="wrong-questions-review" class="review-box" style="display:none; border-left-color: var(--error);">
+            <strong>需要複習的部分 Needs Review:</strong>
+            <ul id="wrong-list" style="margin: 10px 0; padding-left: 20px; text-align: left;"></ul>
+        </div>
+
+        <button class="btn" style="margin-top: 30px;" onclick="goToStage(5)">查看完整翻譯與拼音 Review Full Text & Translation 📖</button>
+        <button class="btn option-btn" style="margin-top: 10px; text-align: center;" onclick="location.reload()">再玩一次 Play Again ↺</button>
+    </div>
+
+    <div id="stage-review" class="stage">
+        <h2>完整對話翻譯 <span class="en-sub">Full Translation Review</span></h2>
+        <div class="text-panel" style="max-height: 60vh; text-align: left;">
+            <p><strong>Huiling:</strong> Martin, look, so many people are lining up at this shop to buy radish cake!</p>
+            <p><strong>Martin:</strong> Wow, their radish cake must be very delicious! Should we buy a few pieces to try?</p>
+            <p><strong>Huiling:</strong> Sure! Did you know? Radish cake is a traditional food Taiwanese people often eat during the Lunar New Year.</p>
+            <p><strong>Martin:</strong> Why do Taiwanese people eat radish cake during the Lunar New Year?</p>
+            <p><strong>Huiling:</strong> "Radish" in Taiwanese is called "tshài-thâu", which sounds like "good omen" (hǎo cǎi tóu), meaning good luck and smoothness in the new year.</p>
+            <p><strong>Martin:</strong> So radish cake is an auspicious food! What is it made of?</p>
+            <p><strong>Huiling:</strong> It's made with indica rice flour, white radish, dried shrimp, and dried shiitake mushrooms. It smells and tastes very fragrant.</p>
+            <p><em>(Eating while walking after buying)</em></p>
+            <p><strong>Martin:</strong> The skin is a bit crispy, the inside is very soft, and the taste is just right. It's really delicious! It's my first time eating such a special food.</p>
+            <p><strong>Huiling:</strong> We eat radish cake during the Lunar New Year, and we also eat it on normal days.</p>
+            <p><strong>Martin:</strong> Then I have one more choice for my breakfast in the future!</p>
+        </div>
+        <button class="btn" onclick="goToStage(4)">⬅️ 返回總結 Back to Summary</button>
     </div>
 
 </div>
@@ -234,87 +235,114 @@
         {
             question: "這篇對話主要在介紹什麼？",
             options: ["介紹馬丁的一天", "介紹臺灣過年的好運氣", "介紹傳統美食蘿蔔糕", "介紹怎麼在臺灣排隊"],
-            answerIndex: 2, // 0-based index (Options 3)
+            answerIndex: 2, 
             hint: "提示：想想這兩個人一直在聊什麼食物。"
         },
         {
             question: "馬丁為什麼想買這家的蘿蔔糕？",
             options: ["因為店門口有很多人排隊", "因為店裡的蘿蔔糕很便宜", "因為惠玲說這家店很有名", "因為店裡的東西很難吃"],
-            answerIndex: 0, // (Options 1)
+            answerIndex: 0,
             hint: "提示：對照對話一開始馬丁看到的情況。"
         },
         {
             question: "為什麼過年要吃蘿蔔糕？",
             options: ["因為很有營養", "因為這道菜很貴", "因為代表好運氣和順利", "因為馬丁不喜歡吃"],
-            answerIndex: 2, // (Options 3)
+            answerIndex: 2,
             hint: "提示：想想「菜頭」和「好彩頭」的關係。"
         },
         {
             question: "馬丁為什麼會說「以後早餐多一個選擇」？",
             options: ["因為他不喜歡這個食物", "因為他覺得蘿蔔糕不好吃", "因為他覺得很好吃，而且平常也可以吃", "因為他想開店"],
-            answerIndex: 2, // (Options 3)
+            answerIndex: 2,
             hint: "提示：注意他吃完之後的反應。"
         },
         {
             question: "這家蘿蔔糕給人的感覺是什麼？",
             options: ["不好吃，也不特別", "很貴，但很普通", "好吃、有特色，而且有文化意義", "只有過年才會吃"],
-            answerIndex: 2, // (Options 3)
+            answerIndex: 2,
             hint: "提示：想想味道、特色和過年的意義。"
         }
     ];
 
     // --- State Variables ---
+    let currentStage = 1;
+    let stageHistory = [1];
+    let userStage1Guess = "";
     let currentQuizIndex = 0;
     let totalScore = 0;
-    let hasFailedCurrentQuestion = false; // Tracks if they got it wrong on the first try
+    let currentQuestionAttempts = 0;
+    let wrongQuestionsIndices = [];
 
-    // --- Core Functions ---
+    // --- Navigation Functions ---
     function goToStage(stageNumber) {
         document.querySelectorAll('.stage').forEach(el => el.classList.remove('active'));
-        if(stageNumber === 1) document.getElementById('stage1').classList.add('active');
-        if(stageNumber === 2) document.getElementById('stage2').classList.add('active');
-        if(stageNumber === 3) document.getElementById('stage3').classList.add('active');
-        if(stageNumber === 4) document.getElementById('stage-result').classList.add('active');
+        
+        let targetId = 'stage' + stageNumber;
+        if(stageNumber === 4) targetId = 'stage-result';
+        if(stageNumber === 5) targetId = 'stage-review';
+        
+        document.getElementById(targetId).classList.add('active');
+        
+        if (currentStage !== stageNumber) {
+            stageHistory.push(stageNumber);
+            currentStage = stageNumber;
+        }
+        updateNavButtons();
     }
 
-    // Stage 1 Logic
-    function checkStage1(selectedChoice, btnElement) {
-        const feedbackBox = document.getElementById('s1-feedback');
-        const nextBtn = document.getElementById('btn-to-reading');
-        
-        feedbackBox.style.display = 'block';
-
-        if (selectedChoice === 'B') {
-            feedbackBox.style.backgroundColor = '#EAFBF1';
-            feedbackBox.style.color = '#27AE60';
-            feedbackBox.innerText = '沒錯！這種食物不只是過年才吃，平常生活中也很常見。';
-            btnElement.classList.add('correct');
-            nextBtn.style.display = 'block';
+    function goBack() {
+        if (stageHistory.length > 1) {
+            stageHistory.pop(); 
+            let prevStage = stageHistory[stageHistory.length - 1];
+            currentStage = prevStage;
             
-            // Disable other buttons to lock choice
-            document.querySelectorAll('#s1-options .btn').forEach(b => {
-                if(b !== btnElement) b.disabled = true;
-            });
-        } else {
-            feedbackBox.style.backgroundColor = '#FDEDED';
-            feedbackBox.style.color = '#C0392B';
-            feedbackBox.innerText = '不太對喔，再想想哪一種食物在早餐店也常看到？';
-            btnElement.classList.add('wrong');
-            btnElement.disabled = true;
+            document.querySelectorAll('.stage').forEach(el => el.classList.remove('active'));
+            let targetId = 'stage' + prevStage;
+            if(prevStage === 4) targetId = 'stage-result';
+            if(prevStage === 5) targetId = 'stage-review';
+            document.getElementById(targetId).classList.add('active');
+        }
+        updateNavButtons();
+    }
+
+    function goHome() {
+        if(confirm("確定要回首頁嗎？進度將會重置。\nAre you sure you want to go home? Progress will be reset.")){
+            location.reload();
         }
     }
 
-    // Stage 3 Logic
+    function updateNavButtons() {
+        document.getElementById('btn-back').style.display = stageHistory.length > 1 ? 'inline-flex' : 'none';
+    }
+
+    // --- Stage 1 Logic ---
+    function selectStage1(choice, btnElement) {
+        userStage1Guess = choice;
+        document.querySelectorAll('#s1-options .btn').forEach(b => b.classList.remove('selected'));
+        btnElement.classList.add('selected');
+        
+        document.getElementById('s1-feedback').style.display = 'block';
+        document.getElementById('btn-to-reading').style.display = 'block';
+    }
+
+    // --- Stage 2 Logic ---
+    function togglePinyin() {
+        const content = document.getElementById('reading-content');
+        content.classList.toggle('hide-pinyin');
+    }
+
+    // --- Stage 3 Logic ---
     function startQuiz() {
         currentQuizIndex = 0;
         totalScore = 0;
+        wrongQuestionsIndices = [];
         goToStage(3);
         renderQuiz();
     }
 
     function renderQuiz() {
         const qData = quizData[currentQuizIndex];
-        hasFailedCurrentQuestion = false;
+        currentQuestionAttempts = 0;
 
         document.getElementById('quiz-progress').innerText = `問題 ${currentQuizIndex + 1} / 5`;
         document.getElementById('quiz-question-text').innerText = qData.question;
@@ -344,31 +372,41 @@
             btnElement.classList.add('correct');
             hintBox.style.display = 'block';
             hintBox.style.color = 'var(--success)';
-            hintBox.innerText = '答對了！';
+            hintBox.innerText = '答對了！ Correct!';
             
-            if (!hasFailedCurrentQuestion) {
-                totalScore++; // Only award point on first try
-            }
+            if (currentQuestionAttempts === 0) totalScore++;
 
-            // Disable all options
             document.querySelectorAll('#quiz-options .btn').forEach(b => b.disabled = true);
-            
-            // Change button text if it's the last question
-            if (currentQuizIndex === quizData.length - 1) {
-                nextBtn.innerText = '查看結果 ➔';
-            }
-            nextBtn.style.display = 'block';
-
+            showNextButton(nextBtn);
         } else {
             // Incorrect
-            hasFailedCurrentQuestion = true;
+            currentQuestionAttempts++;
             btnElement.classList.add('wrong');
             btnElement.disabled = true;
-            
             hintBox.style.display = 'block';
             hintBox.style.color = 'var(--error)';
-            hintBox.innerText = qData.hint;
+            
+            if (currentQuestionAttempts === 1) {
+                hintBox.innerText = `不太對喔，再試一次！\n${qData.hint}`;
+            } else {
+                hintBox.innerText = '兩次都選錯了，我們看下一題吧！\nIncorrect twice. Let\'s move on!';
+                wrongQuestionsIndices.push(currentQuizIndex);
+                document.querySelectorAll('#quiz-options .btn').forEach(b => {
+                    b.disabled = true;
+                    if(qData.options.indexOf(b.innerText) === qData.answerIndex) b.classList.add('correct'); // Show correct answer
+                });
+                showNextButton(nextBtn);
+            }
         }
+    }
+
+    function showNextButton(nextBtn) {
+        if (currentQuizIndex === quizData.length - 1) {
+            nextBtn.innerText = '查看學習總結 View Summary ➔';
+        } else {
+            nextBtn.innerText = '下一題 Next ➔';
+        }
+        nextBtn.style.display = 'block';
     }
 
     function nextQuestion() {
@@ -380,20 +418,33 @@
         }
     }
 
-    // Final Stage Logic
+    // --- Stage 4 Logic ---
     function showResult() {
         goToStage(4);
         document.getElementById('final-score').innerText = totalScore;
         
-        const msg = document.getElementById('encouragement-message');
-        if (totalScore === 5) {
-            msg.innerText = "完美！你完全掌握了這篇對話的意思和文化背景。";
-        } else if (totalScore >= 3) {
-            msg.innerText = "很棒的表現！你對蘿蔔糕和台灣文化有很好的了解。";
+        // Show Stage 1 guess
+        document.getElementById('user-guess-display').innerText = userStage1Guess ? `選項 Option ${userStage1Guess}` : '未選擇';
+
+        // Show wrong questions list
+        const wrongReviewBox = document.getElementById('wrong-questions-review');
+        const wrongList = document.getElementById('wrong-list');
+        wrongList.innerHTML = '';
+        
+        if (wrongQuestionsIndices.length > 0) {
+            wrongReviewBox.style.display = 'block';
+            wrongQuestionsIndices.forEach(index => {
+                let li = document.createElement('li');
+                li.innerText = `第 ${index + 1} 題：${quizData[index].question}`;
+                wrongList.appendChild(li);
+            });
         } else {
-            msg.innerText = "做得很棒！多練習幾次，你會越來越熟悉這些內容的！";
+            wrongReviewBox.style.display = 'none';
         }
     }
+
+    // Init navigation visibility
+    updateNavButtons();
 </script>
 
 </body>
