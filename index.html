@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>華語閱讀小遊戲：好吃的蘿蔔糕</title>
+    <style>
+        :root {
+            --primary: #4A90E2;
+            --primary-hover: #357ABD;
+            --success: #2ECC71;
+            --error: #E74C3C;
+            --background: #F4F7F6;
+            --card-bg: #FFFFFF;
+            --text-main: #333333;
+            --text-muted: #777777;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Arial, 'LiHei Pro', 'Microsoft JhengHei', sans-serif;
+            background-color: var(--background);
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            background-color: var(--card-bg);
+            max-width: 600px;
+            width: 100%;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .stage {
+            display: none;
+            padding: 40px 30px;
+            opacity: 0;
+            transition: opacity 0.4s ease-in-out;
+        }
+
+        .stage.active {
+            display: block;
+            opacity: 1;
+        }
+
+        h2 {
+            margin-top: 0;
+            color: var(--primary);
+            border-bottom: 2px solid #EEE;
+            padding-bottom: 10px;
+        }
+
+        .btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .btn:hover:not(:disabled) {
+            background-color: var(--primary-hover);
+        }
+
+        .btn:active:not(:disabled) {
+            transform: scale(0.98);
+        }
+
+        .btn:disabled {
+            background-color: #BDC3C7;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .option-btn {
+            background-color: white;
+            color: var(--text-main);
+            border: 2px solid #E0E0E0;
+            text-align: left;
+            margin-bottom: 10px;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            border-color: var(--primary);
+            background-color: #F8FBFF;
+        }
+
+        .option-btn.correct {
+            border-color: var(--success);
+            background-color: #EAFBF1;
+        }
+
+        .option-btn.wrong {
+            border-color: var(--error);
+            background-color: #FDEDED;
+        }
+
+        .feedback-box {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 6px;
+            display: none;
+            font-weight: bold;
+        }
+
+        /* Stage 2 Reading specific styles */
+        .dialogue-container {
+            max-height: 400px;
+            overflow-y: auto;
+            padding-right: 10px;
+            line-height: 1.6;
+        }
+        
+        .dialogue-line {
+            margin-bottom: 15px;
+        }
+
+        .speaker {
+            font-weight: bold;
+            color: var(--primary);
+            margin-right: 8px;
+        }
+
+        .action-text {
+            color: var(--text-muted);
+            font-style: italic;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        /* Progress indicator */
+        .progress-text {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 15px;
+        }
+        
+        .hint-text {
+            color: var(--error);
+            font-size: 14px;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .center-text {
+            text-align: center;
+        }
+
+        .score-display {
+            font-size: 48px;
+            font-weight: bold;
+            color: var(--primary);
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    
+    <div id="stage1" class="stage active">
+        <h2>課前動動腦</h2>
+        <p>在開始閱讀之前，我們先來猜一個小問題：</p>
+        <p><strong>台灣哪一種傳統食物除了過年，平常早餐也常看到？</strong></p>
+        
+        <div id="s1-options">
+            <button class="btn option-btn" onclick="checkStage1('A', this)">A. 臭豆腐</button>
+            <button class="btn option-btn" onclick="checkStage1('B', this)">B. 蘿蔔糕</button>
+            <button class="btn option-btn" onclick="checkStage1('C', this)">C. 佛跳牆</button>
+            <button class="btn option-btn" onclick="checkStage1('D', this)">D. 粽子</button>
+        </div>
+
+        <div id="s1-feedback" class="feedback-box"></div>
+        <button id="btn-to-reading" class="btn" style="display:none; margin-top: 20px;" onclick="goToStage(2)">繼續前往閱讀內容 ➔</button>
+    </div>
+
+    <div id="stage2" class="stage">
+        <h2>閱讀對話</h2>
+        <div class="dialogue-container">
+            <div class="dialogue-line"><span class="speaker">惠玲：</span>馬丁，你看，好多人在這家店排隊買蘿蔔糕！</div>
+            <div class="dialogue-line"><span class="speaker">馬丁：</span>哇，他們的蘿蔔糕可能很好吃吧！我們要不要買幾塊試試？</div>
+            <div class="dialogue-line"><span class="speaker">惠玲：</span>好啊！你知道嗎？蘿蔔糕是台灣人過年常吃的傳統食物。</div>
+            <div class="dialogue-line"><span class="speaker">馬丁：</span>為什麼台灣人過年會吃蘿蔔糕？</div>
+            <div class="dialogue-line"><span class="speaker">惠玲：</span>「蘿蔔」的臺語叫「菜頭」，聽起來像「好彩頭」，意思是新的一年有好運氣、順利。</div>
+            <div class="dialogue-line"><span class="speaker">馬丁：</span>原來蘿蔔糕是吉祥的食物啊！那它是用什麼做的？</div>
+            <div class="dialogue-line"><span class="speaker">惠玲：</span>用在來米粉、白蘿蔔、蝦米和乾香菇做的，吃起來很香。</div>
+            <div class="action-text">（買好後邊走邊吃）</div>
+            <div class="dialogue-line"><span class="speaker">馬丁：</span>表皮有點脆，裡面很軟，味道剛好，真的很好吃！我第一次吃到這種特別的食物。</div>
+            <div class="dialogue-line"><span class="speaker">惠玲：</span>蘿蔔糕我們過年吃，平常也會吃。</div>
+            <div class="dialogue-line"><span class="speaker">馬丁：</span>那我以後的早餐就多一個選擇了！</div>
+        </div>
+        <button class="btn" style="margin-top: 30px;" onclick="startQuiz()">我讀完了，開始測驗 ➔</button>
+    </div>
+
+    <div id="stage3" class="stage">
+        <h2>閱讀理解測驗</h2>
+        <div class="progress-text" id="quiz-progress">問題 1 / 5</div>
+        <p><strong id="quiz-question-text"></strong></p>
+        
+        <div id="quiz-options">
+            </div>
+
+        <div id="quiz-hint" class="hint-text"></div>
+        <button id="btn-next-question" class="btn" style="display:none; margin-top: 20px;" onclick="nextQuestion()">下一題 ➔</button>
+    </div>
+
+    <div id="stage-result" class="stage center-text">
+        <h2>測驗完成！</h2>
+        <p>太棒了！你完成了今天的學習旅程。</p>
+        <div class="score-display">
+            <span id="final-score">0</span> / 5
+        </div>
+        <p id="encouragement-message" style="color: var(--text-muted);"></p>
+        <button class="btn" style="margin-top: 30px;" onclick="location.reload()">再玩一次 ↺</button>
+    </div>
+
+</div>
+
+<script>
+    // --- Data ---
+    const quizData = [
+        {
+            question: "這篇對話主要在介紹什麼？",
+            options: ["介紹馬丁的一天", "介紹臺灣過年的好運氣", "介紹傳統美食蘿蔔糕", "介紹怎麼在臺灣排隊"],
+            answerIndex: 2, // 0-based index (Options 3)
+            hint: "提示：想想這兩個人一直在聊什麼食物。"
+        },
+        {
+            question: "馬丁為什麼想買這家的蘿蔔糕？",
+            options: ["因為店門口有很多人排隊", "因為店裡的蘿蔔糕很便宜", "因為惠玲說這家店很有名", "因為店裡的東西很難吃"],
+            answerIndex: 0, // (Options 1)
+            hint: "提示：對照對話一開始馬丁看到的情況。"
+        },
+        {
+            question: "為什麼過年要吃蘿蔔糕？",
+            options: ["因為很有營養", "因為這道菜很貴", "因為代表好運氣和順利", "因為馬丁不喜歡吃"],
+            answerIndex: 2, // (Options 3)
+            hint: "提示：想想「菜頭」和「好彩頭」的關係。"
+        },
+        {
+            question: "馬丁為什麼會說「以後早餐多一個選擇」？",
+            options: ["因為他不喜歡這個食物", "因為他覺得蘿蔔糕不好吃", "因為他覺得很好吃，而且平常也可以吃", "因為他想開店"],
+            answerIndex: 2, // (Options 3)
+            hint: "提示：注意他吃完之後的反應。"
+        },
+        {
+            question: "這家蘿蔔糕給人的感覺是什麼？",
+            options: ["不好吃，也不特別", "很貴，但很普通", "好吃、有特色，而且有文化意義", "只有過年才會吃"],
+            answerIndex: 2, // (Options 3)
+            hint: "提示：想想味道、特色和過年的意義。"
+        }
+    ];
+
+    // --- State Variables ---
+    let currentQuizIndex = 0;
+    let totalScore = 0;
+    let hasFailedCurrentQuestion = false; // Tracks if they got it wrong on the first try
+
+    // --- Core Functions ---
+    function goToStage(stageNumber) {
+        document.querySelectorAll('.stage').forEach(el => el.classList.remove('active'));
+        if(stageNumber === 1) document.getElementById('stage1').classList.add('active');
+        if(stageNumber === 2) document.getElementById('stage2').classList.add('active');
+        if(stageNumber === 3) document.getElementById('stage3').classList.add('active');
+        if(stageNumber === 4) document.getElementById('stage-result').classList.add('active');
+    }
+
+    // Stage 1 Logic
+    function checkStage1(selectedChoice, btnElement) {
+        const feedbackBox = document.getElementById('s1-feedback');
+        const nextBtn = document.getElementById('btn-to-reading');
+        
+        feedbackBox.style.display = 'block';
+
+        if (selectedChoice === 'B') {
+            feedbackBox.style.backgroundColor = '#EAFBF1';
+            feedbackBox.style.color = '#27AE60';
+            feedbackBox.innerText = '沒錯！這種食物不只是過年才吃，平常生活中也很常見。';
+            btnElement.classList.add('correct');
+            nextBtn.style.display = 'block';
+            
+            // Disable other buttons to lock choice
+            document.querySelectorAll('#s1-options .btn').forEach(b => {
+                if(b !== btnElement) b.disabled = true;
+            });
+        } else {
+            feedbackBox.style.backgroundColor = '#FDEDED';
+            feedbackBox.style.color = '#C0392B';
+            feedbackBox.innerText = '不太對喔，再想想哪一種食物在早餐店也常看到？';
+            btnElement.classList.add('wrong');
+            btnElement.disabled = true;
+        }
+    }
+
+    // Stage 3 Logic
+    function startQuiz() {
+        currentQuizIndex = 0;
+        totalScore = 0;
+        goToStage(3);
+        renderQuiz();
+    }
+
+    function renderQuiz() {
+        const qData = quizData[currentQuizIndex];
+        hasFailedCurrentQuestion = false;
+
+        document.getElementById('quiz-progress').innerText = `問題 ${currentQuizIndex + 1} / 5`;
+        document.getElementById('quiz-question-text').innerText = qData.question;
+        
+        const optionsContainer = document.getElementById('quiz-options');
+        optionsContainer.innerHTML = '';
+        
+        document.getElementById('quiz-hint').style.display = 'none';
+        document.getElementById('btn-next-question').style.display = 'none';
+
+        qData.options.forEach((opt, index) => {
+            const btn = document.createElement('button');
+            btn.className = 'btn option-btn';
+            btn.innerText = opt;
+            btn.onclick = () => checkQuizAnswer(index, btn);
+            optionsContainer.appendChild(btn);
+        });
+    }
+
+    function checkQuizAnswer(selectedIndex, btnElement) {
+        const qData = quizData[currentQuizIndex];
+        const hintBox = document.getElementById('quiz-hint');
+        const nextBtn = document.getElementById('btn-next-question');
+
+        if (selectedIndex === qData.answerIndex) {
+            // Correct
+            btnElement.classList.add('correct');
+            hintBox.style.display = 'block';
+            hintBox.style.color = 'var(--success)';
+            hintBox.innerText = '答對了！';
+            
+            if (!hasFailedCurrentQuestion) {
+                totalScore++; // Only award point on first try
+            }
+
+            // Disable all options
+            document.querySelectorAll('#quiz-options .btn').forEach(b => b.disabled = true);
+            
+            // Change button text if it's the last question
+            if (currentQuizIndex === quizData.length - 1) {
+                nextBtn.innerText = '查看結果 ➔';
+            }
+            nextBtn.style.display = 'block';
+
+        } else {
+            // Incorrect
+            hasFailedCurrentQuestion = true;
+            btnElement.classList.add('wrong');
+            btnElement.disabled = true;
+            
+            hintBox.style.display = 'block';
+            hintBox.style.color = 'var(--error)';
+            hintBox.innerText = qData.hint;
+        }
+    }
+
+    function nextQuestion() {
+        currentQuizIndex++;
+        if (currentQuizIndex < quizData.length) {
+            renderQuiz();
+        } else {
+            showResult();
+        }
+    }
+
+    // Final Stage Logic
+    function showResult() {
+        goToStage(4);
+        document.getElementById('final-score').innerText = totalScore;
+        
+        const msg = document.getElementById('encouragement-message');
+        if (totalScore === 5) {
+            msg.innerText = "完美！你完全掌握了這篇對話的意思和文化背景。";
+        } else if (totalScore >= 3) {
+            msg.innerText = "很棒的表現！你對蘿蔔糕和台灣文化有很好的了解。";
+        } else {
+            msg.innerText = "做得很棒！多練習幾次，你會越來越熟悉這些內容的！";
+        }
+    }
+</script>
+
+</body>
+</html>
