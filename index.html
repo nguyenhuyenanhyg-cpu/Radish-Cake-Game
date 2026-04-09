@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hành trình học tiếng Trung: Văn hóa Ẩm thực Đài Loan</title>
+    <title>Hành trình học tiếng Trung: Đi làm thêm ở Đài Loan</title>
     <style>
         /* ================= GLOBAL STYLES ================= */
         :root {
@@ -22,7 +22,17 @@
             --chat-player: #85e04b;
         }
 
-        body { font-family: 'Segoe UI', Arial, 'Microsoft JhengHei', sans-serif; background-color: var(--bg-color); color: var(--text-main); margin: 0; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+        body {
+            font-family: 'Segoe UI', Arial, 'Microsoft JhengHei', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
         .hidden { display: none !important; }
         .screen { flex: 1; display: flex; flex-direction: column; width: 100%; height: 100%; overflow: hidden; }
         
@@ -31,11 +41,14 @@
         .btn-blue:hover:not(:disabled) { background-color: var(--hover-blue); }
         .btn-orange { background: var(--orange-main); color: white; padding: 15px 40px; font-size: 20px; border-radius: 50px; box-shadow: 0 5px 15px rgba(255, 152, 0, 0.4);}
         .btn-orange:hover { background: var(--orange-hover); transform: translateY(-3px); }
+        .btn-disabled { background-color: #BDC3C7 !important; cursor: not-allowed; transform: none !important; box-shadow: none !important;}
 
-        /* ================= LOBBY SCREEN ================= */
+        /* ================= LOBBY SCREEN (MENU) ================= */
         #lobby-screen { align-items: center; justify-content: center; background: #fffcf5; background-image: radial-gradient(var(--orange-main) 1px, transparent 1px); background-size: 20px 20px; overflow-y: auto;}
         .title-box { text-align: center; background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border: 4px solid var(--orange-main); margin-bottom: 30px;}
         .title-box h1 { color: var(--orange-hover); font-size: 36px; margin: 0 0 10px 0; }
+        
+        /* Đã mở rộng max-width để chứa đủ 4 thẻ trên 1 hàng */
         .stage-grid { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; max-width: 1000px; padding: 20px;}
         .stage-card { background: white; padding: 30px 20px; border-radius: 15px; text-align: center; border: 3px solid #ccc; cursor: pointer; transition: 0.3s; width: 160px; position: relative;}
         .stage-card.unlocked { border-color: var(--success-green); box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3); }
@@ -44,39 +57,35 @@
         .lock-icon { position: absolute; top: 10px; right: 10px; font-size: 20px;}
 
         /* ================= READING & QUIZ SCREEN ================= */
-        #reading-screen { align-items: center; padding: 2vh 20px; overflow: hidden; background-color: var(--bg-color);}
-        .reading-container { background-color: var(--card-bg); max-width: 1200px; width: 95%; height: 96vh; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); padding: 20px 30px; display: flex; flex-direction: column; }
+        #reading-screen { align-items: center; padding: 20px; overflow-y: auto; background-color: var(--bg-color);}
+        /* Đã mở rộng khung bài khóa lên 1200px / 95% màn hình */
+        .reading-container { background-color: var(--card-bg); max-width: 1200px; width: 95%; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); padding: 30px;}
         
-        .nav-bar { display: flex; justify-content: space-between; margin-bottom: 10px; border-bottom: 2px solid #eee; padding-bottom: 10px;}
+        .nav-bar { display: flex; justify-content: space-between; margin-bottom: 20px; border-bottom: 2px solid #eee; padding-bottom: 10px;}
         .nav-btn { background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 16px;}
         .nav-btn:hover { color: var(--primary-blue); }
 
-        .reading-layout { display: flex; gap: 30px; flex: 1; overflow: hidden; margin-top: 10px;}
-        .text-panel { flex: 1.4; overflow-y: auto; padding-right: 15px; font-size: 1.2em; line-height: 2.2;}
-        .right-panel { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
-        .image-panel { flex-shrink: 0; margin-bottom: 15px; }
-        .image-panel img { width: 100%; height: 220px; object-fit: cover; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        .reading-layout { display: flex; gap: 40px; align-items: flex-start; margin-top: 20px;}
+        .text-panel { flex: 1.5; font-size: 1.2em; line-height: 2.2; max-height: 55vh; overflow-y: auto; padding-right: 15px;}
+        .image-panel { flex: 1; position: sticky; top: 0;}
+        .image-panel img { width: 100%; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); object-fit: cover; }
         
-        #quiz-section { flex: 1; overflow-y: auto; background: #f8fbff; padding: 15px 20px; border-radius: 10px; border: 2px solid var(--primary-blue); display: flex; flex-direction: column; }
-
         ruby { ruby-align: center; margin-right: 2px; }
         rt { font-size: 0.6em; color: #888; font-family: Arial, sans-serif; transition: opacity 0.3s; }
         .hide-pinyin rt { opacity: 0; user-select: none; }
-        .speaker { font-weight: bold; color: var(--primary-blue); margin-right: 8px;}
+        .speaker { font-weight: bold; color: var(--primary-blue); }
 
-        #quiz-options { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
-        .option-btn { background-color: white; color: var(--text-main); border: 2px solid var(--border); text-align: left; padding: 10px 12px; font-size: 15px; border-radius: 6px; cursor: pointer; transition: 0.2s;}
+        /* Quiz Layout Grid 2x2 */
+        #quiz-options { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 10px; }
+        .option-btn { background-color: white; color: var(--text-main); border: 2px solid var(--border); text-align: left; padding: 12px 15px; font-size: 16px; border-radius: 6px; cursor: pointer; transition: 0.2s;}
         .option-btn:hover:not(:disabled) { border-color: var(--primary-blue); background-color: #F8FBFF; }
         .option-btn.correct { border-color: var(--success-green); background-color: #EAFBF1; }
         .option-btn.wrong { border-color: var(--error-red); background-color: #FDEDED; }
-        .hint-box { padding: 10px; border-radius: 6px; background: #fff3e0; border-left: 4px solid var(--orange-main); display: none; font-size: 0.95em;}
+        .hint-box { padding: 12px; border-radius: 6px; background: #fff3e0; border-left: 4px solid var(--orange-main); display: none;}
 
         @media (max-width: 768px) { 
-            .reading-container { height: auto; min-height: 100vh; overflow-y: auto;}
-            .reading-layout { flex-direction: column; overflow: visible; } 
-            .text-panel, .right-panel, #quiz-section { overflow: visible; flex: none; }
-            .image-panel img { height: auto; }
-            #quiz-options { grid-template-columns: 1fr; }
+            .reading-layout { flex-direction: column-reverse; } 
+            #quiz-options { grid-template-columns: 1fr; } /* Trên mobile sẽ trở về 1 cột */
         }
 
         /* ================= TRANSITION SCREEN ================= */
@@ -86,6 +95,7 @@
         /* ================= CHAT LINE GAME ================= */
         #top-bar-chat { display: flex; justify-content: space-between; align-items: center; background: #333; color: white; padding: 10px 20px; font-size: 16px; font-weight: bold;}
         #chat-main-content { display: flex; flex: 1; overflow: hidden; }
+        
         #chat-container { width: 40%; background: var(--chat-bg); display: flex; flex-direction: column; border-right: 2px solid #ccc; position: relative; }
         #chat-history { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px; scroll-behavior: smooth;}
         
@@ -93,6 +103,7 @@
         .boss-msg { align-self: flex-start; background: #ffffff; border-top-left-radius: 0; }
         .player-msg { align-self: flex-end; background: var(--chat-player); border-top-right-radius: 0; }
         .speaker-name { font-weight: bold; margin-bottom: 5px; border-bottom: 1px solid #eee; padding-bottom: 3px; font-size: 14px; color: #555;}
+        
         .play-audio-btn { background: #f0f0f0; border: none; cursor: pointer; font-size: 16px; padding: 5px; border-radius: 50%; margin-left: 10px;}
         
         .choices-area { background: #ebf0f5; padding: 15px; border-top: 2px solid #ccc; display: flex; flex-direction: column; gap: 10px; max-height: 40%; overflow-y: auto;}
@@ -102,6 +113,7 @@
         #game-container { width: 60%; background: #fffcf5; padding: 30px; display: flex; flex-direction: column; align-items: center;}
         .env-item { font-size: 80px; padding: 20px; background: rgba(255,255,255,0.7); border: 3px dashed #ccc; border-radius: 20px; margin-top: 50px;}
 
+        /* Typing Indicator */
         @keyframes blink { 0% { opacity: .2; } 20% { opacity: 1; } 100% { opacity: .2; } }
         .typing-dot { font-size: 24px; line-height: 10px; animation: blink 1.4s infinite both; }
         .typing-dot:nth-child(2) { animation-delay: .2s; } .typing-dot:nth-child(3) { animation-delay: .4s; }
@@ -116,36 +128,33 @@
             <h1>🍜 Hệ thống Học tập</h1>
             <p style="color: #666; font-size: 18px; margin-top:0;">Đọc hiểu & Trải nghiệm làm thêm tại Đài Loan</p>
         </div>
-        <div class="stage-grid" id="stage-grid-container"></div>
+        <div class="stage-grid" id="stage-grid-container">
+            </div>
     </div>
 
     <div id="reading-screen" class="screen hidden">
         <div class="reading-container">
             <div class="nav-bar">
                 <button class="nav-btn" onclick="backToLobby()">⬅️ Quay lại Bản đồ</button>
-                <button class="nav-btn" onclick="togglePinyin()" style="background:#eee; padding:5px 10px; border-radius:15px; color:#333;">Aa Bật/Tắt Pinyin</button>
+                <button class="nav-btn" onclick="togglePinyin()" style="background:#eee; padding:5px 10px; border-radius:15px;">Aa Bật/Tắt Pinyin</button>
             </div>
             
-            <h2 id="reading-title" style="color: var(--primary-blue); margin-top:0;"></h2>
+            <h2 id="reading-title" style="color: var(--primary-blue);"></h2>
             
             <div id="reading-layout-box" class="reading-layout">
                 <div class="text-panel" id="reading-content"></div>
-                <div class="right-panel">
-                    <div class="image-panel">
-                        <img id="reading-image" src="" alt="Illustration" onerror="this.src='https://via.placeholder.com/400x220?text=Chưa+có+ảnh'">
-                    </div>
-                    <div id="quiz-section">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                            <h3 style="color: var(--primary-blue); margin: 0;">📝 Kiểm tra Đọc hiểu</h3>
-                            <div id="quiz-progress" style="color: var(--text-muted); font-size: 0.9em; font-weight: bold;"></div>
-                        </div>
-                        <p style="margin-top:0;"><strong id="quiz-question-text" style="font-size: 1.1em;"></strong></p>
-                        
-                        <div id="quiz-options"></div>
-                        <div id="quiz-hint" class="hint-box"></div>
-                        <button id="btn-next-quiz" class="btn btn-blue hidden" onclick="nextQuizQuestion()">Câu tiếp theo ➔</button>
-                    </div>
+                <div class="image-panel">
+                    <img id="reading-image" src="" alt="Illustration" onerror="this.src='https://via.placeholder.com/400x220?text=Chưa+có+ảnh'">
                 </div>
+            </div>
+
+            <div id="quiz-section" style="margin-top: 30px; border-top: 2px solid #eee; padding-top: 20px;">
+                <h3 style="color: var(--primary-blue);">📝 Kiểm tra Đọc hiểu</h3>
+                <div id="quiz-progress" style="color: var(--text-muted); margin-bottom: 10px;"></div>
+                <p><strong id="quiz-question-text" style="font-size: 1.1em;"></strong></p>
+                <div id="quiz-options"></div>
+                <div id="quiz-hint" class="hint-box"></div>
+                <button id="btn-next-quiz" class="btn btn-blue hidden" onclick="nextQuizQuestion()">Câu tiếp theo ➔</button>
             </div>
         </div>
     </div>
@@ -154,7 +163,7 @@
         <div class="trans-box">
             <h2 style="color: var(--success-green); margin-top:0;">🎉 Chúc mừng!</h2>
             <p style="font-size: 18px; line-height: 1.6;">Bạn đã hoàn thành phần Đọc hiểu xuất sắc.</p>
-            <p style="font-size: 18px; line-height: 1.6; color: var(--orange-hover); font-weight: bold;">Bây giờ hãy vận dụng kiến thức để đến quán ăn phụ việc nhé!</p>
+            <p style="font-size: 18px; line-height: 1.6; color: var(--orange-hover); font-weight: bold;">Bây giờ hãy vận dụng kiến thức để đến quán ăn phụ việc cho Ông chủ nhé!</p>
             <button class="btn btn-orange" style="margin-top: 20px;" onclick="startChatMode()">Bắt đầu làm thêm ➔</button>
         </div>
     </div>
@@ -189,31 +198,61 @@
 
     <script>
         /* ==================================================================
-           MASTER DATABASE - CHỨA TOÀN BỘ 4 BÀI HỌC (ĐÃ SẠCH SẼ 100%)
+           MASTER DATABASE (Dữ liệu hệ thống đã chỉnh sửa gọn gàng)
            ================================================================== */
         const MASTER_DATA = {
             1: {
                 title: "Bài 1: 蘿蔔糕 (Bánh Củ Cải)",
                 image: "luobogao-light.png",
                 readingHtml: `
-                    <div style="margin-bottom:10px;"><span class="speaker">惠玲：</span><ruby>馬<rt>mǎ</rt></ruby><ruby>丁<rt>dīng</rt></ruby>，<ruby>你<rt>nǐ</rt></ruby><ruby>看<rt>kàn</rt></ruby>，<ruby>好<rt>hǎo</rt></ruby><ruby>多<rt>duō</rt></ruby><ruby>人<rt>rén</rt></ruby><ruby>在<rt>zài</rt></ruby><ruby>這<rt>zhè</rt></ruby><ruby>家<rt>jiā</rt></ruby><ruby>店<rt>diàn</rt></ruby><ruby>排<rt>pái</rt></ruby><ruby>隊<rt>duì</rt></ruby><ruby>買<rt>mǎi</rt></ruby><strong><ruby>蘿<rt>luó</rt></ruby><ruby>蔔<rt>bo</rt></ruby><ruby>糕<rt>gāo</rt></ruby></strong>！</div>
-                    <div style="margin-bottom:10px;"><span class="speaker">馬丁：</span><ruby>哇<rt>wa</rt></ruby>，<ruby>他<rt>tā</rt></ruby><ruby>們<rt>men</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>蘿<rt>luó</rt></ruby><ruby>蔔<rt>bo</rt></ruby><ruby>糕<rt>gāo</rt></ruby><ruby>可<rt>kě</rt></ruby><ruby>能<rt>néng</rt></ruby><ruby>很<rt>hěn</rt></ruby><ruby>好<rt>hǎo</rt></ruby><ruby>吃<rt>chī</rt></ruby><ruby>吧<rt>ba</rt></ruby>！<ruby>我<rt>wǒ</rt></ruby><ruby>們<rt>men</rt></ruby><ruby>要<rt>yào</rt></ruby><ruby>不<rt>bù</rt></ruby><ruby>要<rt>yào</rt></ruby><ruby>買<rt>mǎi</rt></ruby><ruby>幾<rt>jǐ</rt></ruby><ruby>塊<rt>kuài</rt></ruby><ruby>試<rt>shì</rt></ruby><ruby>試<rt>shì</rt></ruby>？</div>
-                    <div style="margin-bottom:10px;"><span class="speaker">惠玲：</span><ruby>好<rt>hǎo</rt></ruby><ruby>啊<rt>a</rt></ruby>！<ruby>你<rt>nǐ</rt></ruby><ruby>知<rt>zhī</rt></ruby><ruby>道<rt>dào</rt></ruby><ruby>嗎<rt>ma</rt></ruby>？<ruby>蘿<rt>luó</rt></ruby><ruby>蔔<rt>bo</rt></ruby><ruby>糕<rt>gāo</rt></ruby><ruby>是<rt>shì</rt></ruby><ruby>台<rt>tái</rt></ruby><ruby>灣<rt>wān</rt></ruby><ruby>人<rt>rén</rt></ruby><ruby>過<rt>guò</rt></ruby><ruby>年<rt>nián</rt></ruby><ruby>常<rt>cháng</rt></ruby><ruby>吃<rt>chī</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>傳<rt>chuán</rt></ruby><ruby>統<rt>tǒng</rt></ruby><ruby>食<rt>shí</rt></ruby><ruby>物<rt>wù</rt></ruby>。</div>
-                    <div style="margin-bottom:10px;"><span class="speaker">馬丁：</span><ruby>為<rt>wèi</rt></ruby><ruby>什<rt>shén</rt></ruby><ruby>麼<rt>me</rt></ruby><ruby>台<rt>tái</rt></ruby><ruby>灣<rt>wān</rt></ruby><ruby>人<rt>rén</rt></ruby><ruby>過<rt>guò</rt></ruby><ruby>年<rt>nián</rt></ruby><ruby>會<rt>huì</rt></ruby><ruby>吃<rt>chī</rt></ruby><ruby>蘿<rt>luó</rt></ruby><ruby>蔔<rt>bo</rt></ruby><ruby>糕<rt>gāo</rt></ruby>？</div>
-                    <div style="margin-bottom:10px;"><span class="speaker">惠玲：</span>「<ruby>蘿<rt>luó</rt></ruby><ruby>蔔<rt>bo</rt></ruby>」<ruby>的<rt>de</rt></ruby><ruby>臺<rt>tái</rt></ruby><ruby>語<rt>yǔ</rt></ruby><ruby>叫<rt>jiào</rt></ruby>「<strong><ruby>菜<rt>tshài</rt></ruby><ruby>頭<rt>thâu</rt></ruby></strong>」，<ruby>聽<rt>tīng</rt></ruby><ruby>起<rt>qǐ</rt></ruby><ruby>來<rt>lái</rt></ruby><ruby>像<rt>xiàng</rt></ruby>「<strong><ruby>好<rt>hǎo</rt></ruby><ruby>彩<rt>cǎi</rt></ruby><ruby>頭<rt>tóu</rt></ruby></strong>」，<ruby>意<rt>yì</rt></ruby><ruby>思<rt>si</rt></ruby><ruby>是<rt>shì</rt></ruby><ruby>新<rt>xīn</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>一<rt>yì</rt></ruby><ruby>年<rt>nián</rt></ruby><ruby>有<rt>yǒu</rt></ruby><ruby>好<rt>hǎo</rt></ruby><ruby>運<rt>yùn</rt></ruby><ruby>氣<rt>qì</rt></ruby>、<ruby>順<rt>shùn</rt></ruby><ruby>利<rt>lì</rt></ruby>。</div>
-                    <div style="margin-bottom:10px;"><span class="speaker">馬丁：</span><ruby>原<rt>yuán</rt></ruby><ruby>來<rt>lái</rt></ruby><ruby>蘿<rt>luó</rt></ruby><ruby>蔔<rt>bo</rt></ruby><ruby>糕<rt>gāo</rt></ruby><ruby>是<rt>shì</rt></ruby><ruby>吉<rt>jí</rt></ruby><ruby>祥<rt>xiáng</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>食<rt>shí</rt></ruby><ruby>物<rt>wù</rt></ruby><ruby>啊<rt>a</rt></ruby>！<ruby>那<rt>nà</rt></ruby><ruby>它<rt>tā</rt></ruby><ruby>是<rt>shì</rt></ruby><ruby>用<rt>yòng</rt></ruby><ruby>什<rt>shén</rt></ruby><ruby>麼<rt>me</rt></ruby><ruby>做<rt>zuò</rt></ruby><ruby>的<rt>de</rt></ruby>？</div>
-                    <div style="margin-bottom:10px;"><span class="speaker">惠玲：</span><ruby>用<rt>yòng</rt></ruby><ruby>在<rt>zài</rt></ruby><ruby>來<rt>lái</rt></ruby><ruby>米<rt>mǐ</rt></ruby><ruby>粉<rt>fěn</rt></ruby>、<ruby>白<rt>bái</rt></ruby><ruby>蘿<rt>luó</rt></ruby><ruby>蔔<rt>bo</rt></ruby>、<ruby>蝦<rt>xiā</rt></ruby><ruby>米<rt>mǐ</rt></ruby><ruby>和<rt>hé</rt></ruby><ruby>乾<rt>gān</rt></ruby><ruby>香<rt>xiāng</rt></ruby><ruby>菇<rt>gū</rt></ruby><ruby>做<rt>zuò</rt></ruby><ruby>的<rt>de</rt></ruby>，<ruby>吃<rt>chī</rt></ruby><ruby>起<rt>qǐ</rt></ruby><ruby>來<rt>lái</rt></ruby><ruby>很<rt>hěn</rt></ruby><ruby>香<rt>xiāng</rt></ruby>。</div>
-                    <div style="color:#888; text-align:center; margin-bottom:10px;">（<ruby>買<rt>mǎi</rt></ruby><ruby>好<rt>hǎo</rt></ruby><ruby>後<rt>hòu</rt></ruby><ruby>邊<rt>biān</rt></ruby><ruby>走<rt>zǒu</rt></ruby><ruby>邊<rt>biān</rt></ruby><ruby>吃<rt>chī</rt></ruby>）</div>
-                    <div style="margin-bottom:10px;"><span class="speaker">馬丁：</span><ruby>表<rt>biǎo</rt></ruby><ruby>皮<rt>pí</rt></ruby><ruby>脆<rt>cuì</rt></ruby><ruby>脆<rt>cuì</rt></ruby><ruby>的<rt>de</rt></ruby>，<ruby>裡<rt>lǐ</rt></ruby><ruby>面<rt>miàn</rt></ruby><ruby>很<rt>hěn</rt></ruby><ruby>軟<rt>ruǎn</rt></ruby>，<ruby>味<rt>wèi</rt></ruby><ruby>道<rt>dào</rt></ruby><ruby>剛<rt>gāng</rt></ruby><ruby>好<rt>hǎo</rt></ruby>，<ruby>真<rt>zhēn</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>很<rt>hěn</rt></ruby><ruby>好<rt>hǎo</rt></ruby><ruby>吃<rt>chī</rt></ruby>！<ruby>我<rt>wǒ</rt></ruby><ruby>第<rt>dì</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>次<rt>cì</rt></ruby><ruby>吃<rt>chī</rt></ruby><ruby>到<rt>dào</rt></ruby><ruby>這<rt>zhè</rt></ruby><ruby>種<rt>zhǒng</rt></ruby><ruby>特<rt>tè</rt></ruby><ruby>別<rt>bié</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>食<rt>shí</rt></ruby><ruby>物<rt>wù</rt></ruby>。</div>
-                    <div style="margin-bottom:10px;"><span class="speaker">惠玲：</span><ruby>蘿<rt>luó</rt></ruby><ruby>蔔<rt>bo</rt></ruby><ruby>糕<rt>gāo</rt></ruby><ruby>我<rt>wǒ</rt></ruby><ruby>們<rt>men</rt></ruby><ruby>過<rt>guò</rt></ruby><ruby>年<rt>nián</rt></ruby><ruby>吃<rt>chī</rt></ruby>，<ruby>平<rt>píng</rt></ruby><ruby>常<rt>cháng</rt></ruby><ruby>也<rt>yě</rt></ruby><ruby>會<rt>huì</rt></ruby><ruby>吃<rt>chī</rt></ruby>。</div>
-                    <div style="margin-bottom:10px;"><span class="speaker">馬丁：</span><ruby>那<rt>nà</rt></ruby><ruby>我<rt>wǒ</rt></ruby><ruby>以<rt>yǐ</rt></ruby><ruby>後<rt>hòu</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>早<rt>zǎo</rt></ruby><ruby>餐<rt>cān</rt></ruby><ruby>就<rt>jiù</rt></ruby><ruby>多<rt>duō</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>個<rt>gè</rt></ruby><ruby>選<rt>xuǎn</rt></ruby><ruby>擇<rt>zé</rt></ruby><ruby>了<rt>le</rt></ruby>！</div>
+                    <div><span class="speaker">惠玲：</span><ruby>馬<rt>mǎ</rt></ruby><ruby>丁<rt>dīng</rt></ruby>，<ruby>你<rt>nǐ</rt></ruby><ruby>看<rt>kàn</rt></ruby>，<ruby>好<rt>hǎo</rt></ruby><ruby>多<rt>duō</rt></ruby><ruby>人<rt>rén</rt></ruby><ruby>在<rt>zài</rt></ruby><ruby>這<rt>zhè</rt></ruby><ruby>家<rt>jiā</rt></ruby><ruby>店<rt>diàn</rt></ruby><ruby>排<rt>pái</rt></ruby><ruby>隊<rt>duì</rt></ruby><ruby>買<rt>mǎi</rt></ruby><strong><ruby>蘿<rt>luó</rt></ruby><ruby>蔔<rt>bo</rt></ruby><ruby>糕<rt>gāo</rt></ruby></strong>！</div><br>
+                    <div><span class="speaker">馬丁：</span><ruby>哇<rt>wa</rt></ruby>，<ruby>他<rt>tā</rt></ruby><ruby>們<rt>men</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>蘿<rt>luó</rt></ruby><ruby>蔔<rt>bo</rt></ruby><ruby>糕<rt>gāo</rt></ruby><ruby>可<rt>kě</rt></ruby><ruby>能<rt>néng</rt></ruby><ruby>很<rt>hěn</rt></ruby><ruby>好<rt>hǎo</rt></ruby><ruby>吃<rt>chī</rt></ruby><ruby>吧<rt>ba</rt></ruby>！<ruby>我<rt>wǒ</rt></ruby><ruby>們<rt>men</rt></ruby><ruby>要<rt>yào</rt></ruby><ruby>不<rt>bù</rt></ruby><ruby>要<rt>yào</rt></ruby><ruby>買<rt>mǎi</rt></ruby><ruby>幾<rt>jǐ</rt></ruby><ruby>塊<rt>kuài</rt></ruby><ruby>試<rt>shì</rt></ruby><ruby>試<rt>shì</rt></ruby>？</div><br>
+                    <div><span class="speaker">惠玲：</span><ruby>好<rt>hǎo</rt></ruby><ruby>啊<rt>a</rt></ruby>！<ruby>你<rt>nǐ</rt></ruby><ruby>知<rt>zhī</rt></ruby><ruby>道<rt>dào</rt></ruby><ruby>嗎<rt>ma</rt></ruby>？<ruby>蘿<rt>luó</rt></ruby><ruby>蔔<rt>bo</rt></ruby><ruby>糕<rt>gāo</rt></ruby><ruby>是<rt>shì</rt></ruby><ruby>台<rt>tái</rt></ruby><ruby>灣<rt>wān</rt></ruby><ruby>人<rt>rén</rt></ruby><ruby>過<rt>guò</rt></ruby><ruby>年<rt>nián</rt></ruby><ruby>常<rt>cháng</rt></ruby><ruby>吃<rt>chī</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>傳<rt>chuán</rt></ruby><ruby>統<rt>tǒng</rt></ruby><ruby>食<rt>shí</rt></ruby><ruby>物<rt>wù</rt></ruby>。</div><br>
+                    <div><span class="speaker">馬丁：</span><ruby>為<rt>wèi</rt></ruby><ruby>什<rt>shén</rt></ruby><ruby>麼<rt>me</rt></ruby><ruby>台<rt>tái</rt></ruby><ruby>灣<rt>wān</rt></ruby><ruby>人<rt>rén</rt></ruby><ruby>過<rt>guò</rt></ruby><ruby>年<rt>nián</rt></ruby><ruby>會<rt>huì</rt></ruby><ruby>吃<rt>chī</rt></ruby><ruby>蘿<rt>luó</rt></ruby><ruby>蔔<rt>bo</rt></ruby><ruby>糕<rt>gāo</rt></ruby>？</div><br>
+                    <div><span class="speaker">惠玲：</span>「<ruby>蘿<rt>luó</rt></ruby><ruby>蔔<rt>bo</rt></ruby>」<ruby>的<rt>de</rt></ruby><ruby>臺<rt>tái</rt></ruby><ruby>語<rt>yǔ</rt></ruby><ruby>叫<rt>jiào</rt></ruby>「<strong><ruby>菜<rt>tshài</rt></ruby><ruby>頭<rt>thâu</rt></ruby></strong>」，<ruby>聽<rt>tīng</rt></ruby><ruby>起<rt>qǐ</rt></ruby><ruby>來<rt>lái</rt></ruby><ruby>像<rt>xiàng</rt></ruby>「<strong><ruby>好<rt>hǎo</rt></ruby><ruby>彩<rt>cǎi</rt></ruby><ruby>頭<rt>tóu</rt></ruby></strong>」，<ruby>意<rt>yì</rt></ruby><ruby>思<rt>si</rt></ruby><ruby>是<rt>shì</rt></ruby><ruby>新<rt>xīn</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>一<rt>yì</rt></ruby><ruby>年<rt>nián</rt></ruby><ruby>有<rt>yǒu</rt></ruby><ruby>好<rt>hǎo</rt></ruby><ruby>運<rt>yùn</rt></ruby><ruby>氣<rt>qì</rt></ruby>、<ruby>順<rt>shùn</rt></ruby><ruby>利<rt>lì</rt></ruby>。</div><br>
+                    <div><span class="speaker">馬丁：</span><ruby>原<rt>yuán</rt></ruby><ruby>來<rt>lái</rt></ruby><ruby>蘿<rt>luó</rt></ruby><ruby>蔔<rt>bo</rt></ruby><ruby>糕<rt>gāo</rt></ruby><ruby>是<rt>shì</rt></ruby><ruby>吉<rt>jí</rt></ruby><ruby>祥<rt>xiáng</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>食<rt>shí</rt></ruby><ruby>物<rt>wù</rt></ruby><ruby>啊<rt>a</rt></ruby>！<ruby>那<rt>nà</rt></ruby><ruby>它<rt>tā</rt></ruby><ruby>是<rt>shì</rt></ruby><ruby>用<rt>yòng</rt></ruby><ruby>什<rt>shén</rt></ruby><ruby>麼<rt>me</rt></ruby><ruby>做<rt>zuò</rt></ruby><ruby>的<rt>de</rt></ruby>？</div><br>
+                    <div><span class="speaker">惠玲：</span><ruby>用<rt>yòng</rt></ruby><ruby>在<rt>zài</rt></ruby><ruby>來<rt>lái</rt></ruby><ruby>米<rt>mǐ</rt></ruby><ruby>粉<rt>fěn</rt></ruby>、<ruby>白<rt>bái</rt></ruby><ruby>蘿<rt>luó</rt></ruby><ruby>蔔<rt>bo</rt></ruby>、<ruby>蝦<rt>xiā</rt></ruby><ruby>米<rt>mǐ</rt></ruby><ruby>和<rt>hé</rt></ruby><ruby>乾<rt>gān</rt></ruby><ruby>香<rt>xiāng</rt></ruby><ruby>菇<rt>gū</rt></ruby><ruby>做<rt>zuò</rt></ruby><ruby>的<rt>de</rt></ruby>，<ruby>吃<rt>chī</rt></ruby><ruby>起<rt>qǐ</rt></ruby><ruby>來<rt>lái</rt></ruby><ruby>很<rt>hěn</rt></ruby><ruby>香<rt>xiāng</rt></ruby>。</div><br>
+                    <div style="color:#888; text-align:center;">（<ruby>買<rt>mǎi</rt></ruby><ruby>好<rt>hǎo</rt></ruby><ruby>後<rt>hòu</rt></ruby><ruby>邊<rt>biān</rt></ruby><ruby>走<rt>zǒu</rt></ruby><ruby>邊<rt>biān</rt></ruby><ruby>吃<rt>chī</rt></ruby>）</div><br>
+                    <div><span class="speaker">馬丁：</span><ruby>表<rt>biǎo</rt></ruby><ruby>皮<rt>pí</rt></ruby><ruby>脆<rt>cuì</rt></ruby><ruby>脆<rt>cuì</rt></ruby><ruby>的<rt>de</rt></ruby>，<ruby>裡<rt>lǐ</rt></ruby><ruby>面<rt>miàn</rt></ruby><ruby>很<rt>hěn</rt></ruby><ruby>軟<rt>ruǎn</rt></ruby>，<ruby>味<rt>wèi</rt></ruby><ruby>道<rt>dào</rt></ruby><ruby>剛<rt>gāng</rt></ruby><ruby>好<rt>hǎo</rt></ruby>，<ruby>真<rt>zhēn</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>很<rt>hěn</rt></ruby><ruby>好<rt>hǎo</rt></ruby><ruby>吃<rt>chī</rt></ruby>！<ruby>我<rt>wǒ</rt></ruby><ruby>第<rt>dì</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>次<rt>cì</rt></ruby><ruby>吃<rt>chī</rt></ruby><ruby>到<rt>dào</rt></ruby><ruby>這<rt>zhè</rt></ruby><ruby>種<rt>zhǒng</rt></ruby><ruby>特<rt>tè</rt></ruby><ruby>別<rt>bié</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>食<rt>shí</rt></ruby><ruby>物<rt>wù</rt></ruby>。</div><br>
+                    <div><span class="speaker">惠玲：</span><ruby>蘿<rt>luó</rt></ruby><ruby>蔔<rt>bo</rt></ruby><ruby>糕<rt>gāo</rt></ruby><ruby>我<rt>wǒ</rt></ruby><ruby>們<rt>men</rt></ruby><ruby>過<rt>guò</rt></ruby><ruby>年<rt>nián</rt></ruby><ruby>吃<rt>chī</rt></ruby>，<ruby>平<rt>píng</rt></ruby><ruby>常<rt>cháng</rt></ruby><ruby>也<rt>yě</rt></ruby><ruby>會<rt>huì</rt></ruby><ruby>吃<rt>chī</rt></ruby>。</div><br>
+                    <div><span class="speaker">馬丁：</span><ruby>那<rt>nà</rt></ruby><ruby>我<rt>wǒ</rt></ruby><ruby>以<rt>yǐ</rt></ruby><ruby>後<rt>hòu</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>早<rt>zǎo</rt></ruby><ruby>餐<rt>cān</rt></ruby><ruby>就<rt>jiù</rt></ruby><ruby>多<rt>duō</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>個<rt>gè</rt></ruby><ruby>選<rt>xuǎn</rt></ruby><ruby>擇<rt>zé</rt></ruby><ruby>了<rt>le</rt></ruby>！</div>
                 `,
                 quiz: [
-                    { q: "根據對話一開始，馬丁為什麼想試試這家店的蘿蔔糕？", opts: ["因為他以前在家鄉常常吃。", "因為惠玲說這家店非常有名。", "因為看到很多客人在等，覺得應該很好吃。", "因為這家店的蘿蔔糕賣得很便宜。"], ansIdx: 2, hintZh: "對照對話一開始，馬丁看到了什麼情況？", hintVi: "Đối chiếu phần đầu, Martin đã nhìn thấy tình huống gì?" },
-                    { q: "為什麼台灣人過年喜歡吃蘿蔔糕？", opts: ["因為吃起來表皮脆脆的。", "因為吃了以後，代表會有好事情發生。", "因為冬天吃白蘿蔔對身體很好。", "因為這是外國人最喜歡的台灣食物。"], ansIdx: 1, hintZh: "結合「好彩頭」的意思。過年吃這個是希望新的一年怎麼樣？", hintVi: "Kết hợp ý nghĩa của từ 'Hảo thái đầu'. Ăn món này dịp Tết là mong muốn năm mới sẽ ra sao?" },
-                    { q: "關於「蘿蔔糕」，我們可以從對話中知道什麼？", opts: ["裡面有肉，所以吃起來很香。", "只有過年的時候才可以買得到。", "是用白蘿蔔做的，而且有帶來好運的意思。", "因為裡面很脆，所以馬丁想當早餐吃。"], ansIdx: 2, hintZh: "結合惠玲說的「意思」、「材料」，以及馬丁說的「口感」。找出完全正確的句子。", hintVi: "Kết hợp lời Huiling nói về 'ý nghĩa', 'nguyên liệu' và lời Martin về 'kết cấu món ăn'. Tìm ra câu hoàn toàn chính xác." },
-                    { q: "馬丁說「以後早餐多一個選擇」，表示他以後打算怎麼做？", opts: ["決定以後每天早上都要自己做蘿蔔糕。", "想在台灣開一家賣蘿蔔糕的早餐店。", "只會在過年的時候吃蘿蔔糕當早餐。", "平常的早上可能也會去買蘿蔔糕來吃。"], ansIdx: 3, hintZh: "對照惠玲說「平常也會吃」，推論馬丁未來的計畫。", hintVi: "Đối chiếu câu 'bình thường cũng ăn' của Huiling để suy luận dự định tương lai của Martin." },
-                    { q: "這段對話主要在介紹什麼？", opts: ["怎麼自己在家做台灣傳統食物。", "台灣傳統食物蘿蔔糕的意思和特色。", "台灣人過年會去哪裡排隊買東西。", "馬丁在台灣的早生活和習慣。"], ansIdx: 1, hintZh: "想想兩個人一直在聊什麼食物，還有它的意義。", hintVi: "Suy nghĩ xem hai người họ liên tục nói về món ăn nào, cùng ý nghĩa của nó." }
+                    {
+                        q: "根據對話一開始，馬丁為什麼想試試這家店的蘿蔔糕？",
+                        opts: ["因為他以前在家鄉常常吃。", "因為惠玲說這家店非常有名。", "因為看到很多客人在等，覺得應該很好吃。", "因為這家店的蘿蔔糕賣得很便宜。"],
+                        ansIdx: 2,
+                        hintZh: "對照對話一開始，馬丁看到了什麼情況？",
+                        hintVi: "Đối chiếu phần đầu, Martin đã nhìn thấy tình huống gì?"
+                    },
+                    {
+                        q: "為什麼台灣人過年喜歡吃蘿蔔糕？",
+                        opts: ["因為吃起來表皮脆脆的。", "因為吃了以後，代表會有好事情發生。", "因為冬天吃白蘿蔔對身體很好。", "因為這是外國人最喜歡的台灣食物。"],
+                        ansIdx: 1,
+                        hintZh: "結合「好彩頭」的意思。過年吃這個是希望新的一年怎麼樣？",
+                        hintVi: "Kết hợp ý nghĩa của từ 'Hảo thái đầu'. Ăn món này dịp Tết là mong muốn năm mới sẽ ra sao?"
+                    },
+                    {
+                        q: "關於「蘿蔔糕」，我們可以從對話中知道什麼？",
+                        opts: ["裡面有肉，所以吃起來很香。", "只有過年的時候才可以買得到。", "是用白蘿蔔做的，而且有帶來好運的意思。", "因為裡面很脆，所以馬丁想當早餐吃。"],
+                        ansIdx: 2,
+                        hintZh: "結合惠玲說的「意思」、「材料」，以及馬丁說的「口感」。找出完全正確的句子。",
+                        hintVi: "Kết hợp lời Huiling nói về 'ý nghĩa', 'nguyên liệu' và lời Martin về 'kết cấu món ăn'. Tìm ra câu hoàn toàn chính xác."
+                    },
+                    {
+                        q: "馬丁說「以後早餐多一個選擇」，表示他以後打算怎麼做？",
+                        opts: ["決定以後每天早上都要自己做蘿蔔糕。", "想在台灣開一家賣蘿蔔糕的早餐店。", "只會在過年的時候吃蘿蔔糕當早餐。", "平常的早上可能也會去買蘿蔔糕來吃。"],
+                        ansIdx: 3,
+                        hintZh: "對照惠玲說「平常也會吃」，推論馬丁未來的計畫。",
+                        hintVi: "Đối chiếu câu 'bình thường cũng ăn' của Huiling để suy luận dự định tương lai của Martin."
+                    },
+                    {
+                        q: "這段對話主要在介紹什麼？",
+                        opts: ["怎麼自己在家做台灣傳統食物。", "台灣傳統食物蘿蔔糕的意思和特色。", "台灣人過年會去哪裡排隊買東西。", "馬丁在台灣的早生活和習慣。"],
+                        ansIdx: 1,
+                        hintZh: "想想兩個人一直在聊什麼食物，還有它的意義。",
+                        hintVi: "Suy nghĩ xem hai người họ liên tục nói về món ăn nào, cùng ý nghĩa của nó."
+                    }
                 ],
                 chatLogic: {
                     grammarReview: [
@@ -223,27 +262,51 @@
                         "<strong>菜頭 (Tshài-thâu)：</strong> Củ cải trong tiếng Đài, phát âm giống「彩頭」(Điềm lành)."
                     ],
                     tasks: [
-                        { taskName: "Nhiệm vụ 1: Tìm nguyên liệu", speakerIcon: "👨‍🍳 老闆", textZh: "早安！快開店了。去旁邊的冰箱看看，你昨天有沒有買到蝦米？", interactHtml: `🥬 🦐 🍄`, choices: [
-                            { textZh: "老闆，我找蝦米了。", replyZh: "你是說你「找」了，那到底是有沒有「找到」呢？你再確實跟我報告一次！", isCorrect: false },
-                            { textZh: "老闆，我沒看到蝦米。", replyZh: "沒「看到」嗎？可能放在比較裡面的地方。就在冰箱第二層的小袋子裡，你再找找看？", isCorrect: false },
-                            { textZh: "老闆，我看到蝦米了！", replyZh: "太好了！你學得很快。拿出來準備做蘿蔔糕吧。👍", isCorrect: true }
-                        ]},
-                        { taskName: "Nhiệm vụ 2: Pha bột", speakerIcon: "👨‍🍳 老闆", textZh: "聽好，我們的蘿蔔糕是用純「在來米粉」做的，絕對不能加麵粉！", interactHtml: `🌾 vs 🍚`, choices: [
-                            { textZh: "老闆，我加麵粉了。", replyZh: "哎呀，加成「麵粉」了嗎？中文的粉類很多，容易搞混。我們是用「在來米粉」喔。沒關係，我們重新調一盆，你再去拿「在來米粉」過來試試看？", isCorrect: false },
-                            { textZh: "老闆，我加在來米粉了。", replyZh: "沒錯！就是加「在來米粉」，你記得很清楚，準備下鍋囉。💯", isCorrect: true }
-                        ]},
-                        { taskName: "Nhiệm vụ 3: Kỹ thuật chiên", speakerIcon: "👨‍🍳 老闆", textZh: "蘿蔔糕要煎得「恰恰」才好吃。你看看鍋裡，表皮看起來怎麼樣了？", interactHtml: `🍳`, choices: [
-                            { textZh: "表皮吃起來恰恰的！", replyZh: "現在還在鍋子裡，很燙，還不能「吃」喔！你再用眼睛觀察一下，換個說法試試看？", isCorrect: false },
-                            { textZh: "表皮看起來恰恰的！", replyZh: "用對了！看起來顏色很漂亮，準備端給客人吧。", isCorrect: true }
-                        ]},
-                        { taskName: "Nhiệm vụ 4: Phục vụ khách", speakerIcon: "👱‍♂️ 馬丁", textZh: "你好！我聽說台灣人過年吃蘿蔔糕，為什麼呢？", interactHtml: `🍽️`, choices: [
-                            { textZh: "因為我會做，所以你應該吃。", replyZh: "哇，你「會做」很厲害！不過，我是想問為什麼台灣人過年要吃蘿蔔糕呢？是不是有特別的意思？你再想想看？", isCorrect: false },
-                            { textZh: "因為蘿蔔叫菜頭，吃蘿蔔糕，新的一年會有好運氣！", replyZh: "原來如此！你的中文解釋得很好，那我買兩份！🤩", isCorrect: true }
-                        ]}
+                        {   
+                            taskName: "Nhiệm vụ 1: Tìm nguyên liệu",
+                            speakerIcon: "👨‍🍳 老闆",
+                            textZh: "早安！快開店了。去旁邊的冰箱看看，你昨天有沒有買到蝦米？",
+                            interactHtml: `🥬 🦐 🍄`,
+                            choices: [
+                                { textZh: "老闆，我找蝦米了。", replyZh: "你是說你「找」了，那到底是有沒有「找到」呢？你再確實跟我報告一次！", isCorrect: false },
+                                { textZh: "老闆，我沒看到蝦米。", replyZh: "沒「看到」嗎？可能放在比較裡面的地方。就在冰箱第二層的小袋子裡，你再找找看？", isCorrect: false },
+                                { textZh: "老闆，我看到蝦米了！", replyZh: "太好了！你學得很快。拿出來準備做蘿蔔糕吧。👍", isCorrect: true }
+                            ]
+                        },
+                        {   
+                            taskName: "Nhiệm vụ 2: Pha bột",
+                            speakerIcon: "👨‍🍳 老闆",
+                            textZh: "聽好，我們的蘿蔔糕是用純「在來米粉」做的，絕對不能加麵粉！",
+                            interactHtml: `🌾 vs 🍚`,
+                            choices: [
+                                { textZh: "老闆，我加麵粉了。", replyZh: "哎呀，加成「麵粉」了嗎？中文的粉類很多，容易搞混。我們是用「在來米粉」喔。沒關係，我們重新調一盆，你再去拿「在來米粉」過來試試看？", isCorrect: false },
+                                { textZh: "老闆，我加在來米粉了。", replyZh: "沒錯！就是加「在來米粉」，你記得很清楚，準備下鍋囉。💯", isCorrect: true }
+                            ]
+                        },
+                        {   
+                            taskName: "Nhiệm vụ 3: Kỹ thuật chiên",
+                            speakerIcon: "👨‍🍳 老闆",
+                            textZh: "蘿蔔糕要煎得「恰恰」才好吃。你看看鍋裡，表皮看起來怎麼樣了？",
+                            interactHtml: `🍳`,
+                            choices: [
+                                { textZh: "表皮吃起來恰恰的！", replyZh: "現在還在鍋子裡，很燙，還不能「吃」喔！你再用眼睛觀察一下，換個說法試試看？", isCorrect: false },
+                                { textZh: "表皮看起來恰恰的！", replyZh: "用對了！看起來顏色很漂亮，準備端給客人吧。", isCorrect: true }
+                            ]
+                        },
+                        {   
+                            taskName: "Nhiệm vụ 4: Phục vụ khách Tây",
+                            speakerIcon: "👱‍♂️ 馬丁",
+                            textZh: "你好！我聽說台灣人過年吃蘿蔔糕，為什麼呢？",
+                            interactHtml: `🍽️`,
+                            choices: [
+                                { textZh: "因為我會做，所以你應該吃。", replyZh: "哇，你「會做」很厲害！不過，我是想問為什麼台灣人過年要吃蘿蔔糕呢？是不是有特別的意思？你再想想看？", isCorrect: false },
+                                { textZh: "因為蘿蔔叫菜頭，吃蘿蔔糕，新的一年會有好運氣！", replyZh: "原來如此！你的中文解釋得很好，那我買兩份！🤩", isCorrect: true }
+                            ]
+                        }
                     ]
                 }
             },
-            2: {
+            2: { 
                 title: "Bài 2: 年糕 (Bánh Tổ)",
                 image: "niangao-light.png",
                 readingHtml: `
@@ -294,129 +357,25 @@
                     ]
                 }
             },
-            3: {
-                title: "Bài 3: 佛跳牆 (Phật Nhảy Tường)",
-                image: "fotiaoqiang-light.png",
-                readingHtml: `
-                    <div style="margin-bottom:10px;"><span class="speaker">月芳：</span>田中，來，你可以坐這邊。</div>
-                    <div style="margin-bottom:10px;"><span class="speaker">田中：</span>好，謝謝妳！</div>
-                    <div style="margin-bottom:10px;"><span class="speaker">月芳：</span>你知道嗎？現在很多台灣人過年都不自己煮菜了。</div>
-                    <div style="margin-bottom:10px;"><span class="speaker">田中：</span>喔，我懂了。是不是因為大家平常都很忙？</div>
-                    <div style="margin-bottom:10px;"><span class="speaker">月芳：</span>對的，大家平常工作很忙，而且有些年菜要準備很多東西，也要花很多時間。</div>
-                    <div style="margin-bottom:10px;"><span class="speaker">田中：</span>比如說呢？</div>
-                    <div style="margin-bottom:10px;"><span class="speaker">月芳：</span>比如這道菜，它叫「佛跳牆」。東西又多又不容易做。</div>
-                    <div style="margin-bottom:10px;"><span class="speaker">田中：</span>原來是這樣。那我們今天吃的佛跳牆是你煮的嗎？</div>
-                    <div style="margin-bottom:10px;"><span class="speaker">月芳：</span>不是，是我媽媽買的，回家熱一熱就可以吃。</div>
-                    <div style="margin-bottom:10px;"><span class="speaker">田中：</span>（吃一口）哇，好香喔！裡面有好多東西！</div>
-                    <div style="margin-bottom:10px;"><span class="speaker">月芳：</span>對啊，有豬腳、海參、干貝和芋頭，味道很濃。</div>
-                    <div style="margin-bottom:10px;"><span class="speaker">田中：</span>真的又方便又好吃！</div>
-                `,
-                quiz: [
-                    { q: "對話一開始，田中明白了台灣人過年有什麼特別的現象？", opts: ["大家喜歡去外面餐廳吃飯。", "越來越多人不自己準備年菜了。", "台灣人過年一定要吃素菜。", "年輕人不再跟家人慶祝新年了。"], ansIdx: 1, hintZh: "對照對話一開始，月芳告訴田中現在的台灣人過年「都不...」做什麼事？", hintVi: "Đối chiếu với phần đầu đoạn thoại, Nguyệt Phương nói người Đài Loan bây giờ đón Tết 'đều không...' làm việc gì?" },
-                    { q: "月芳覺得「佛跳牆」這道菜怎麼樣？", opts: ["準備起來很不簡單。", "是她媽媽最喜歡自己做的菜。", "裡面的材料很少。", "只有在特別的餐廳才吃得到。"], ansIdx: 0, hintZh: "對照月芳形容佛跳牆的話，她說這道菜「不容易做」，意思是什麼？", hintVi: "Đối chiếu với lời Nguyệt Phương mô tả món Phật nhảy tường, cô ấy nói món này 'không dễ làm', ý là gì? (不容易 = 不簡單)" },
-                    { q: "今天桌上的佛跳牆，月芳的媽媽是怎麼準備的？", opts: ["去市場買材料自己慢慢做。", "買別人做好的，讓溫度變高就能吃。", "請朋友來家裡幫忙煮。", "先放在冰箱裡兩天再拿出來。"], ansIdx: 1, hintZh: "月芳說買回家以後要「熱一熱」就能吃。「熱」是什麼意思呢？", hintVi: "Nguyệt Phương nói mua về nhà xong 'hâm nóng' là ăn được. Chữ 'nóng' mang ý nghĩa gì trong các hành động sau?" },
-                    { q: "田中吃完這道菜以後，為什麼覺得「又方便又好吃」？", opts: ["因為他不用花錢買，而且味道很香。", "因為不用自己花時間煮，味道也很棒。", "因為裡面的豬腳對身體很好。", "因為他很喜歡用微波爐熱東西。"], ansIdx: 1, hintZh: "結合田中的感覺，「好吃」是因為味道香，「方便」是因為什麼？（對照前面的內容：買現成的、熱一熱）", hintVi: "Kết hợp cảm nhận của Tanaka, 'ngon' là vì vị thơm, còn 'tiện lợi' là vì điều gì? (Đối chiếu nội dung trước: mua đồ sẵn, hâm nóng)." },
-                    { q: "這段對話主要在說什麼？", opts: ["台灣人過年越來越喜歡吃素菜。", "現代人買現成菜的習慣和佛跳牆的特色。", "去傳統市場買佛跳牆材料的方法。", "田中向月芳介紹日本的新年食物。"], ansIdx: 1, hintZh: "總結整段對話，他們從「大家過年不自己煮菜」聊到了哪一道料理？", hintVi: "Tóm tắt lại toàn bộ đoạn hội thoại, họ đã chuyển từ 'mọi người không tự nấu ăn Tết' sang nói về món ăn nào?" }
-                ],
-                chatLogic: {
-                    grammarReview: [
-                        "<strong>都：</strong>Biểu thị 'đều/tất cả' (all). Chú ý vị trí: đặt trước động từ. Ví dụ: 材料「都」泡好了.",
-                        "<strong>而且：</strong>Liên từ, dùng để bổ sung nguyên nhân hoặc thông tin thứ 2 (hơn nữa/và còn).",
-                        "<strong>又...又...：</strong>Kết nối hai tính từ có cùng tính chất. Ví dụ: 味道「又」香「又」濃.",
-                        "<strong>因為...所以...：</strong>Liên từ nhân quả. Dùng để giải thích mối quan hệ logic giữa nguyên nhân và kết quả."
-                    ],
-                    tasks: [
-                        { taskName: "Nhiệm vụ 1: Kiểm tra nguyên liệu", speakerIcon: "👨‍🍳 老闆", textZh: "很好！海參和干貝要花很多時間泡水，不能馬虎。這些材料「都」泡好了嗎？", interactHtml: `🥣 💦`, choices: [
-                            { textZh: "老闆，這些材料「不」都好了，我看還要再等一下。", replyZh: "咦？你是想說「還沒」全部準備好嗎？那是哪一個還沒好？你再確認一下？", isCorrect: false },
-                            { textZh: "我看這些材料好了「都」，可以用了。", replyZh: "等等，你把順序說反了喔！你要說「都」好了才對。你再重新傳一次訊息？", isCorrect: false },
-                            { textZh: "老闆，我看這些材料「都」好了，明天可以用。", replyZh: "太好了！材料準備得好，味道才會濃。明天加油！👍", isCorrect: true }
-                        ]},
-                        { taskName: "Nhiệm vụ 2: Hiểu nhu cầu khách", speakerIcon: "👨‍🍳 老闆", textZh: "是啊！所以現在很多台灣人過年不自己做了。你覺得原因是什麼？", interactHtml: `📝 📦`, choices: [
-                            { textZh: "我想是因為準備材料很麻煩，「而且」這道菜很容易做。", replyZh: "容易做？如果容易做，大家就不會覺得辛苦了吧？你是不是傳錯訊息了？你再想一下這道菜難不難做？", isCorrect: false },
-                            { textZh: "我想是因為準備材料很麻煩而且...", replyZh: "「而且」後面呢？你話沒說完吧？除了材料麻煩，還有什麼別的原因嗎？再試試看。", isCorrect: false },
-                            { textZh: "我想是因為準備材料很麻煩，「而且」大家平時工作很忙，所以喜歡買現成的。", replyZh: "沒錯，你說到重點了！費工又費時，所以客人才會覺得我們的服務很有價值。👏", isCorrect: true }
-                        ]},
-                        { taskName: "Nhiệm vụ 3: Đánh giá nước dùng", speakerIcon: "👨‍🍳 老闆", textZh: "你來喝喝看這小碗高湯，這可是精華。味道怎麼樣？", interactHtml: `🍲 🥄`, choices: [
-                            { textZh: "哇！這味道喝起來「又」香「也」濃！", replyZh: "你是想說「又...又...」對吧？這道菜是「又香又濃」喔！你再試著說一次？", isCorrect: false },
-                            { textZh: "這味道喝起來很「又」香。", replyZh: "感覺你話只說了一半？「又」後面要接兩個形容詞。你是想表達味道很棒吧？再試一次？", isCorrect: false },
-                            { textZh: "哇！這味道喝起來「又」香「又」濃！我覺得客人一定會喜歡。", replyZh: "沒錯，這就是佛跳牆的靈魂。這道菜還有個名字叫「福壽全」，代表吉祥如意。✨", isCorrect: true }
-                        ]},
-                        { taskName: "Nhiệm vụ 4: Câu chuyện văn hóa", speakerIcon: "👨‍🍳 老闆", textZh: "關於這名字是怎麼來的，跟你剛剛說的「香味」有關喔。", interactHtml: `📜 🏯`, choices: [
-                            { textZh: "「因為」佛想跳牆，「所以」這道菜的味道很香。", replyZh: "順序反了啦！是因為香味吸引了佛，佛才想跳牆的。你再想一下這中間的邏輯？", isCorrect: false },
-                            { textZh: "裡面有很多珍貴材料，所以佛跳牆。", replyZh: "語句不太完整喔。你要用完整的「因為...所以...」來解釋這個名字的由來。再試試看？", isCorrect: false },
-                            { textZh: "是不是「因為」材料很珍貴，味道太香了，「所以」連佛都想跳牆過來吃？", replyZh: "沒錯！就是這個意思。你這趟台灣過年學到了不少文化。明天我們要忙一整天，早點休息吧，新年快樂！🎊", isCorrect: true }
-                        ]}
-                    ]
-                }
-            },
-            4: {
-                title: "Bài 4: 蒸魚 (Cá Hấp)",
-                image: "zhengyu-light.png",
-                readingHtml: `
-                    <div style="margin-bottom:10px;"><span class="speaker">魚攤阿姨：</span>帥哥，來看看，今天的魚很新鮮喔！</div>
-                    <div style="margin-bottom:10px;"><span class="speaker">田中：</span>哇，這些魚看起來很好吃，這是什麼魚？</div>
-                    <div style="margin-bottom:10px;"><span class="speaker">魚攤阿姨：</span>這是鯧魚，你買回去可以做蒸魚喔。</div>
-                    <div style="margin-bottom:10px;"><span class="speaker">田中：</span>啊，可是我沒有做過。</div>
-                    <div style="margin-bottom:10px;"><span class="speaker">鄰居阿姨：</span>田中，你也來買魚啊？鯧魚很適合做蒸魚，過年吃魚有「年年有餘」的意思。</div>
-                    <div style="margin-bottom:10px;"><span class="speaker">田中：</span>哇，真的嗎？我很少做魚，不太會煮。</div>
-                    <div style="margin-bottom:10px;"><span class="speaker">鄰居阿姨：</span>沒關係，很簡單。我教你怎麼做。</div>
-                    <div style="margin-bottom:10px;"><span class="speaker">鄰居阿姨：</span>先把魚洗乾淨，放蔥和薑，再加一點醬油，蒸大約十分鐘就可以了。</div>
-                    <div style="margin-bottom:10px;"><span class="speaker">田中：</span>聽起來好簡單，我買一條回家試試看。阿姨，請給我這條魚。</div>
-                    <div style="margin-bottom:10px;"><span class="speaker">田中：</span>謝謝阿姨，我回家做好了再告訴妳。再見！</div>
-                    <div style="margin-bottom:10px;"><span class="speaker">鄰居阿姨：</span>再見，田中，祝你成功！</div>
-                `,
-                quiz: [
-                    { q: "根據鄰居阿姨的話，台灣人過年吃魚代表什麼意思？", opts: ["大家都喜歡吃新鮮的海鮮。", "希望每年都有多出來的好運或財富。", "因為鯧魚是過年最便宜的菜。", "代表過年不能吃別種肉。"], ansIdx: 1, hintZh: "對照鄰居阿姨說的「年年有餘」，這句吉祥話有什麼特別的希望？", hintVi: "Đối chiếu với câu 'Năm nào cũng dư dả' mà người hàng xóm nói, câu chúc này mang niềm hy vọng đặc biệt gì?" },
-                    { q: "鄰居阿姨教田中做蒸魚，第一步必須做什麼？", opts: ["把蔥和薑放進去。", "加一點醬油。", "把魚放進鍋子裡蒸。", "用水把魚弄乾淨。"], ansIdx: 3, hintZh: "對照鄰居阿姨教的步驟，她說「先...」做什麼？找找看意思一樣的選項。", hintVi: "Đối chiếu với các bước mà người hàng xóm dạy, cô ấy nói 'Trước tiên...' làm gì? Tìm đáp án có ý nghĩa tương đương (用水弄乾淨 = 洗乾淨)." },
-                    { q: "關於田中，從這段對話中我們可以知道什麼？", opts: ["他以前常常自己做蒸魚。", "他常常去傳統市場教別人做菜。", "這是他第一次嘗試自己做蒸魚。", "他覺得鄰居阿姨教的方法太難了。"], ansIdx: 2, hintZh: "結合田中說的「我沒有做過」和「我回家試試看」，可以推論出什麼？", hintVi: "Kết hợp câu Tanaka nói 'Tôi chưa từng làm' và 'Tôi về nhà làm thử xem', có thể suy luận ra điều gì?" },
-                    { q: "田中最後說：「我回家做好了再告訴妳」，他的意思最可能是什麼？", opts: ["他想請阿姨去他家吃魚。", "他想跟阿姨分享他有沒有做成功。", "他做完以後要把魚送給阿姨。", "他回家後要打電話叫阿姨幫忙煮。"], ansIdx: 1, hintZh: "田中第一次做這道菜，他做完後想讓教他的阿姨知道什麼事？", hintVi: "Lần đầu Tanaka làm món này, sau khi làm xong cậu ấy muốn cho người dì đã dạy mình biết chuyện gì?" },
-                    { q: "這段對話主要在說什麼？", opts: ["魚攤阿姨教田中怎麼賣魚。", "鄰居阿姨告訴田中怎麼挑選新鮮的魚。", "田中向鄰居阿姨介紹台灣的過年文化。", "田中在市場學到怎麼做過年的魚料理。"], ansIdx: 3, hintZh: "總結整段對話，田中在哪裡、遇到了誰、學到了什麼事情？", hintVi: "Tóm tắt toàn bộ đoạn hội thoại, Tanaka đang ở đâu, gặp ai và đã học được chuyện gì?" }
-                ],
-                chatLogic: {
-                    grammarReview: [
-                        "<strong>V+過：</strong>Biểu thị kinh nghiệm trong quá khứ (đã từng làm). Phủ định dùng「沒...過」.",
-                        "<strong>V+好：</strong>Biểu thị động tác đã chuẩn bị xong (sẵn sàng). Ví dụ: 材料買好了.",
-                        "<strong>先...再...：</strong>Biểu thị thứ tự trước sau của hành động (Trước tiên... sau đó...).",
-                        "<strong>V+V+看：</strong>Biểu thị việc thử làm một việc gì đó. Ví dụ: 吃吃看 (ăn thử)."
-                    ],
-                    tasks: [
-                        { taskName: "Nhiệm vụ 1: Chợ truyền thống", speakerIcon: "👨‍🍳 老闆", textZh: "新年快樂！傳統市場過年很熱鬧吧？你以前有去買過菜嗎？", interactHtml: `🏮 🥬 🥩`, choices: [
-                            { textZh: "老闆，我以前「不」去過傳統市場。", replyZh: "咦？你是想說你「沒」去過對不對？傳統市場很有趣，你今天可以到處看看喔。你再重新跟我說一次？", isCorrect: false },
-                            { textZh: "老闆，我以前去了傳統市場。", replyZh: "喔？你已經去「過了」嗎？可是你剛剛傳訊息聽起來很驚訝，你再回想一下，是不是第一次去？", isCorrect: false },
-                            { textZh: "老闆，這是我第一次來，我以前「沒」來「過」傳統市場。", replyZh: "原來是這樣！那你慢慢逛，感受一下台灣過年的氣氛。👍", isCorrect: true }
-                        ]},
-                        { taskName: "Nhiệm vụ 2: Chuẩn bị nguyên liệu", speakerIcon: "👨‍🍳 老闆", textZh: "今晚是除夕夜，你要準備做什麼好吃的？材料都準備好了嗎？", interactHtml: `🐟 攤`, choices: [
-                            { textZh: "魚攤阿姨推薦我買鯧魚，所以我買了一條，我好買了！", replyZh: "「好買了」？你應該是想說你已經「買好」了對吧？鯧魚很適合清蒸喔，你再換個順序說說看？", isCorrect: false },
-                            { textZh: "我買完了！阿姨推薦我買鯧魚。", replyZh: "買「完」了？聽起來好像你把整個市場的魚都買光了！你想說的應該是你已經準備「好」了吧？換個說法試試看？", isCorrect: false },
-                            { textZh: "我買「好」了！魚攤阿姨推薦我買鯧魚，所以我買了一條。", replyZh: "動作真快！鯧魚做蒸魚最棒了，期待你的大餐！👏", isCorrect: true }
-                        ]},
-                        { taskName: "Nhiệm vụ 3: Thứ tự nấu ăn", speakerIcon: "👨‍🍳 老闆", textZh: "聽說你沒做過蒸魚，你知道順序嗎？打算怎麼做？", interactHtml: `🐟 🧂 蔥薑`, choices: [
-                            { textZh: "我打算先加醬油，然後洗魚，放蔥和薑。", replyZh: "順序有點怪怪的喔！如果一開始就加醬油，後來洗魚的時候醬油不就被洗掉了嗎？你再想一下「先」做什麼，「再」做什麼？", isCorrect: false },
-                            { textZh: "我打算加醬油先，洗乾淨再。", replyZh: "中文的順序是「先」加醬油，「再」洗乾淨。不過你的步驟顛倒了，你再重新思考一下煮菜的順序？", isCorrect: false },
-                            { textZh: "我打算先加醬油，再把魚洗乾淨，然後放蔥和薑，對嗎？", replyZh: "哎呀，不對啦！你要「先」把魚洗乾淨，放蔥和薑，「再」加一點醬油。最後蒸十分鐘才對喔。", isCorrect: true }
-                        ]},
-                        { taskName: "Nhiệm vụ 4: Chia sẻ thành quả", speakerIcon: "👨‍🍳 老闆", textZh: "哇，看起來很好吃！對了，你知道為什麼台灣人過年一定要吃全魚，而且不能全部吃完嗎？", interactHtml: `📱 💬`, choices: [
-                            { textZh: "因為魚很好吃，所以要慢慢吃吃？", replyZh: "你是想說「慢慢吃」對吧？雖然魚很好吃，但其實有別的意思喔。你再猜猜看有什麼特別的意義？", isCorrect: false },
-                            { textZh: "因為我要把剩下的留給貓咪吃吃看？", replyZh: "想給貓咪「吃吃看」嗎？貓咪一定會很開心！不過，過年留一點魚是有特別的文化意義的喔。你再想一下「魚」的發音？", isCorrect: false },
-                            { textZh: "是因為「魚」和「餘」的發音一樣，代表「年年有餘」對嗎？下次開店，我再做給您吃吃看！", replyZh: "沒錯！就是「年年有餘」！這張照片看起來你做得非常成功。今晚就好好享受你的年夜飯吧！新年快樂！🎊", isCorrect: true }
-                        ]}
-                    ]
-                }
-            }
+            3: { title: "Bài 3: 佛跳牆 (Phật Nhảy Tường)" },
+            4: { title: "Bài 4: 蒸魚 (Cá Hấp)" }
         };
 
         /* ================= STATE MANAGEMENT ================= */
         let unlockedStages = 1;
         let activeStage = 1;
         
+        // Quiz State
         let currentQuizIndex = 0;
         let quizAttempts = 0;
         
+        // Chat State
         let currentTaskIndex = 0;
         let chatScore = 0;
         let firstTryChat = true;
         const synth = window.speechSynthesis;
 
+        // Initialize App
         window.onload = () => {
             let savedProgress = localStorage.getItem('taiwan_game_progress');
             if(savedProgress) unlockedStages = parseInt(savedProgress);
@@ -432,12 +391,14 @@
         function renderLobby() {
             const grid = document.getElementById('stage-grid-container');
             grid.innerHTML = '';
+            
             const icons = ["🥢", "🥞", "🍲", "🐟"];
             
             for(let i = 1; i <= 4; i++) {
                 let isUnlocked = i <= unlockedStages;
                 let card = document.createElement('div');
                 card.className = `stage-card ${isUnlocked ? 'unlocked' : 'locked'}`;
+                
                 let lockIcon = isUnlocked ? '' : '<div class="lock-icon">🔒</div>';
                 
                 card.innerHTML = `
@@ -445,7 +406,10 @@
                     <div style="font-size: 40px; margin-bottom: 10px;">${icons[i-1]}</div>
                     <h3 style="margin:0; font-size: 16px;">${MASTER_DATA[i].title}</h3>
                 `;
-                if(isUnlocked) card.onclick = () => startReadingMode(i);
+                
+                if(isUnlocked) {
+                    card.onclick = () => startReadingMode(i);
+                }
                 grid.appendChild(card);
             }
             switchScreen('lobby-screen');
@@ -458,6 +422,10 @@
 
         /* ================= 2. READING & QUIZ LOGIC ================= */
         function startReadingMode(stageId) {
+            if(!MASTER_DATA[stageId].readingHtml) {
+                alert("Nội dung bài này đang được cập nhật!");
+                return;
+            }
             activeStage = stageId;
             const data = MASTER_DATA[stageId];
             
@@ -479,7 +447,7 @@
             const data = MASTER_DATA[activeStage].quiz[currentQuizIndex];
             quizAttempts = 0;
 
-            document.getElementById('quiz-progress').innerText = `Câu ${currentQuizIndex + 1}/${MASTER_DATA[activeStage].quiz.length}`;
+            document.getElementById('quiz-progress').innerText = `Câu hỏi ${currentQuizIndex + 1} / ${MASTER_DATA[activeStage].quiz.length}`;
             document.getElementById('quiz-question-text').innerText = data.q;
             
             const optionsContainer = document.getElementById('quiz-options');
@@ -508,6 +476,7 @@
                 hintBox.innerHTML = '<strong style="color:var(--success-green);">Chính xác!</strong>';
                 
                 document.querySelectorAll('#quiz-options .btn').forEach(b => b.disabled = true);
+                
                 if(currentQuizIndex === MASTER_DATA[activeStage].quiz.length - 1) {
                     nextBtn.innerText = 'Hoàn thành Đọc hiểu ➔';
                 }
@@ -521,7 +490,7 @@
                 hintBox.style.borderLeftColor = 'var(--error-red)';
                 
                 if (quizAttempts === 1) {
-                    hintBox.innerHTML = `<strong style="color:var(--error-red);">Chưa đúng!</strong> ${data.hintZh}<br><i style="color:#666;">(${data.hintVi})</i>`;
+                    hintBox.innerHTML = `<strong style="color:var(--error-red);">Chưa đúng, thử lại nhé!</strong><br><b>Gợi ý:</b> ${data.hintZh}<br><i style="color:#666;">(${data.hintVi})</i>`;
                 } else {
                     hintBox.innerHTML = '<strong style="color:var(--error-red);">Sai 2 lần. Chúng ta xem câu tiếp theo nhé!</strong>';
                     document.querySelectorAll('#quiz-options .btn').forEach(b => {
@@ -557,7 +526,7 @@
         function updateChatUI() {
             const totalTasks = MASTER_DATA[activeStage].chatLogic.tasks.length;
             document.getElementById('chat-progress-text').innerText = `Nhiệm vụ: ${currentTaskIndex + 1} / ${totalTasks}`;
-            document.getElementById('chat-score-text').innerText = `Độ tin cậy: ${chatScore}`;
+            document.getElementById('chat-score-text').innerText = `Độ tin cậy (Điểm): ${chatScore}`;
         }
 
         function loadChatTask() {
@@ -575,6 +544,7 @@
             document.getElementById('chat-interactive').innerText = task.interactHtml;
             document.getElementById('chat-choices').classList.add('hidden');
             
+            // Boss Typing Effect
             setTimeout(() => {
                 showTypingIndicator();
                 setTimeout(() => {
@@ -625,6 +595,7 @@
             }, 500);
         }
 
+        /* --- Chat Engine Utilities --- */
         function showTypingIndicator() {
             hideTypingIndicator();
             const chatHistory = document.getElementById('chat-history');
@@ -694,6 +665,7 @@
 
         function finishStage() {
             document.getElementById('review-screen').classList.add('hidden');
+            // Unlock next stage if applicable
             if(activeStage === unlockedStages && unlockedStages < 4) {
                 unlockedStages++;
                 localStorage.setItem('taiwan_game_progress', unlockedStages);
