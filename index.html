@@ -36,6 +36,7 @@
         #lobby-screen { align-items: center; justify-content: center; background: #fffcf5; background-image: radial-gradient(var(--orange-main) 1px, transparent 1px); background-size: 20px 20px; overflow-y: auto;}
         .title-box { text-align: center; background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border: 4px solid var(--orange-main); margin-bottom: 30px;}
         .title-box h1 { color: var(--orange-hover); font-size: 36px; margin: 0 0 10px 0; }
+        
         .stage-grid { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; max-width: 1000px; padding: 20px;}
         .stage-card { background: white; padding: 30px 20px; border-radius: 15px; text-align: center; border: 3px solid #ccc; cursor: pointer; transition: 0.3s; width: 160px; position: relative;}
         .stage-card.unlocked { border-color: var(--success-green); box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3); }
@@ -132,7 +133,7 @@
                 <div class="text-panel" id="reading-content"></div>
                 <div class="right-panel">
                     <div class="image-panel">
-                        <img id="reading-image" src="" alt="Illustration" onerror="this.src='https://via.placeholder.com/400x220?text=Chưa+có+ảnh'">
+                        <img id="reading-image" alt="Illustration">
                     </div>
                     <div id="quiz-section">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
@@ -189,7 +190,7 @@
 
     <script>
         /* ==================================================================
-           MASTER DATABASE
+           MASTER DATABASE 
            ================================================================== */
         const MASTER_DATA = {
             1: {
@@ -211,7 +212,7 @@
                 quiz: [
                     { q: "根據對話一開始，馬丁為什麼想試試這家店的蘿蔔糕？", opts: ["因為他以前在家鄉常常吃。", "因為惠玲說這家店非常有名。", "因為看到很多客人在等，覺得應該很好吃。", "因為這家店的蘿蔔糕賣得很便宜。"], ansIdx: 2, hintZh: "對照對話一開始，馬丁看到了什麼情況？", hintVi: "Đối chiếu phần đầu, Martin đã nhìn thấy tình huống gì?" },
                     { q: "為什麼台灣人過年喜歡吃蘿蔔糕？", opts: ["因為吃起來表皮脆脆的。", "因為吃了以後，代表會有好事情發生。", "因為冬天吃白蘿蔔對身體很好。", "因為這是外國人最喜歡的台灣食物。"], ansIdx: 1, hintZh: "結合「好彩頭」的意思。過年吃這個是希望新的一年怎麼樣？", hintVi: "Kết hợp ý nghĩa của từ 'Hảo thái đầu'. Ăn món này dịp Tết là mong muốn năm mới sẽ ra sao?" },
-                    { q: "關於「蘿蔔糕」，我們可以從對話中知道什麼？", opts: ["裡面有肉，所以吃起來很香。", "只有過年的時候才可以買得到。", "是用白蘿蔔做的，而且有帶來好運的意思。", "因為裡面很脆，解以馬丁想當早餐吃。"], ansIdx: 2, hintZh: "結合惠玲說的「意思」、「材料」，以及馬丁說的「口感」。找出完全正確的句子。", hintVi: "Kết hợp lời Huiling nói về 'ý nghĩa', 'nguyên liệu' và lời Martin về 'kết cấu món ăn'. Tìm ra câu hoàn toàn chính xác." },
+                    { q: "關於「蘿蔔糕」，我們可以從對話中知道什麼？", opts: ["裡面有肉，所以吃起來很香。", "只有過年的時候才可以買得到。", "是用白蘿蔔做的，而且有帶來好運的意思。", "因為裡面很脆，所以馬丁想當早餐吃。"], ansIdx: 2, hintZh: "結合惠玲說的「意思」、「材料」，以及馬丁說的「口感」。找出完全正確的句子。", hintVi: "Kết hợp lời Huiling nói về 'ý nghĩa', 'nguyên liệu' và lời Martin về 'kết cấu món ăn'. Tìm ra câu hoàn toàn chính xác." },
                     { q: "馬丁說「以後早餐多一個選擇」，表示他以後打算怎麼做？", opts: ["決定以後每天早上都要自己做蘿蔔糕。", "想在台灣開一家賣蘿蔔糕的早餐店。", "只會在過年的時候吃蘿蔔糕當早餐。", "平常的早上可能也會去買蘿蔔糕來吃。"], ansIdx: 3, hintZh: "對照惠玲說「平常也會吃」，推論馬丁未來的計畫。", hintVi: "Đối chiếu câu 'bình thường cũng ăn' của Huiling để suy luận dự định tương lai của Martin." },
                     { q: "這段對話主要在介紹什麼？", opts: ["怎麼自己在家做台灣傳統食物。", "台灣傳統食物蘿蔔糕的意思和特色。", "台灣人過年會去哪裡排隊買東西。", "馬丁在台灣的早生活和習慣。"], ansIdx: 1, hintZh: "想想兩個人一直在聊什麼食物，還有它的意義。", hintVi: "Suy nghĩ xem hai người họ liên tục nói về món ăn nào, cùng ý nghĩa của nó." }
                 ],
@@ -415,7 +416,7 @@
         let firstTryChat = true;
         const synth = window.speechSynthesis;
 
-        window.onload = () => {
+        document.addEventListener('DOMContentLoaded', () => {
             try {
                 let savedProgress = localStorage.getItem('taiwan_game_progress');
                 if (savedProgress && !isNaN(parseInt(savedProgress))) {
@@ -428,7 +429,7 @@
             } catch (error) {
                 document.getElementById('stage-grid-container').innerHTML = `<p style="color:red;">Lỗi tải dữ liệu: ${error.message}</p>`;
             }
-        };
+        });
 
         function switchScreen(screenId) {
             document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
