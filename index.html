@@ -32,7 +32,7 @@
         .btn-orange { background: var(--orange-main); color: white; padding: 15px 40px; font-size: 20px; border-radius: 50px; box-shadow: 0 5px 15px rgba(255, 152, 0, 0.4);}
         .btn-orange:hover { background: var(--orange-hover); transform: translateY(-3px); }
 
-        /* ================= LOBBY SCREEN (MENU) ================= */
+        /* ================= LOBBY SCREEN ================= */
         #lobby-screen { align-items: center; justify-content: center; background: #fffcf5; background-image: radial-gradient(var(--orange-main) 1px, transparent 1px); background-size: 20px 20px; overflow-y: auto;}
         .title-box { text-align: center; background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border: 4px solid var(--orange-main); margin-bottom: 30px;}
         .title-box h1 { color: var(--orange-hover); font-size: 36px; margin: 0 0 10px 0; }
@@ -189,12 +189,12 @@
 
     <script>
         /* ==================================================================
-           MASTER DATABASE
+           MASTER DATABASE - CHỨA TOÀN BỘ 4 BÀI HỌC (ĐÃ SỬA LỖI CÚ PHÁP)
            ================================================================== */
         const MASTER_DATA = {
             1: {
                 title: "Bài 1: 蘿蔔糕 (Bánh Củ Cải)",
-                image: "luobogao-light.png", // CẬP NHẬT TÊN ẢNH
+                image: "luobogao-light.png",
                 readingHtml: `
                     <div style="margin-bottom:10px;"><span class="speaker">惠玲：</span><ruby>馬<rt>mǎ</rt></ruby><ruby>丁<rt>dīng</rt></ruby>，<ruby>你<rt>nǐ</rt></ruby><ruby>看<rt>kàn</rt></ruby>，<ruby>好<rt>hǎo</rt></ruby><ruby>多<rt>duō</rt></ruby><ruby>人<rt>rén</rt></ruby><ruby>在<rt>zài</rt></ruby><ruby>這<rt>zhè</rt></ruby><ruby>家<rt>jiā</rt></ruby><ruby>店<rt>diàn</rt></ruby><ruby>排<rt>pái</rt></ruby><ruby>隊<rt>duì</rt></ruby><ruby>買<rt>mǎi</rt></ruby><strong><ruby>蘿<rt>luó</rt></ruby><ruby>蔔<rt>bo</rt></ruby><ruby>糕<rt>gāo</rt></ruby></strong>！</div>
                     <div style="margin-bottom:10px;"><span class="speaker">馬丁：</span><ruby>哇<rt>wa</rt></ruby>，<ruby>他<rt>tā</rt></ruby><ruby>們<rt>men</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>蘿<rt>luó</rt></ruby><ruby>蔔<rt>bo</rt></ruby><ruby>糕<rt>gāo</rt></ruby><ruby>可<rt>kě</rt></ruby><ruby>能<rt>néng</rt></ruby><ruby>很<rt>hěn</rt></ruby><ruby>好<rt>hǎo</rt></ruby><ruby>吃<rt>chī</rt></ruby><ruby>吧<rt>ba</rt></ruby>！<ruby>我<rt>wǒ</rt></ruby><ruby>們<rt>men</rt></ruby><ruby>要<rt>yào</rt></ruby><ruby>不<rt>bù</rt></ruby><ruby>要<rt>yào</rt></ruby><ruby>買<rt>mǎi</rt></ruby><ruby>幾<rt>jǐ</rt></ruby><ruby>塊<rt>kuài</rt></ruby><ruby>試<rt>shì</rt></ruby><ruby>試<rt>shì</rt></ruby>？</div>
@@ -245,7 +245,7 @@
             },
             2: {
                 title: "Bài 2: 年糕 (Bánh Tổ)",
-                image: "niangao-light.png", // CẬP NHẬT TÊN ẢNH
+                image: "niangao-light.png",
                 readingHtml: `
                     <div style="margin-bottom:10px;"><span class="speaker">月芳：</span>清香，這是我做的甜點，給妳一點，妳嚐嚐看。</div>
                     <div style="margin-bottom:10px;"><span class="speaker">清香：</span>謝謝妳！（吃了一口）哇，香香甜甜的，這是什麼？</div>
@@ -296,7 +296,7 @@
             },
             3: {
                 title: "Bài 3: 佛跳牆 (Phật Nhảy Tường)",
-                image: "fotiaoqiang-light.png", // CẬP NHẬT TÊN ẢNH
+                image: "fotiaoqiang-light.png",
                 readingHtml: `
                     <div style="margin-bottom:10px;"><span class="speaker">月芳：</span>田中，來，你可以坐這邊。</div>
                     <div style="margin-bottom:10px;"><span class="speaker">田中：</span>好，謝謝妳！</div>
@@ -351,7 +351,7 @@
             },
             4: {
                 title: "Bài 4: 蒸魚 (Cá Hấp)",
-                image: "zhengyu-light.png", // CẬP NHẬT TÊN ẢNH
+                image: "zhengyu-light.png",
                 readingHtml: `
                     <div style="margin-bottom:10px;"><span class="speaker">魚攤阿姨：</span>帥哥，來看看，今天的魚很新鮮喔！</div>
                     <div style="margin-bottom:10px;"><span class="speaker">田中：</span>哇，這些魚看起來很好吃，這是什麼魚？</div>
